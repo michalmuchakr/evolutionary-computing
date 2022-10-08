@@ -1,10 +1,21 @@
+from fitness_function import fitness_function
+
+
 class Chromosome:
     # chromosome
-    gens = []
-    fit_function_value = 0
+    __gens = []
 
-    def __init__(self, initial_gens):
-        self.gens = initial_gens
+    def __init__(self, initial_gens, fittness_function_precision):
+
+        self.__gens = initial_gens
+        self.__fitness_function_val = round(
+            fitness_function(
+                initial_gens[0],
+                initial_gens[1]
+            ),
+            fittness_function_precision
+        )
 
     def __str__(self):
-        print("chromosome x1(" + self.gens[0] + "," + self.gens[1] + " = " + self.fit_function_value)
+        return "(" + str(self.__gens[0]) + ", " + str(self.__gens[1]) + ") = " +\
+               str(self.__fitness_function_val)
