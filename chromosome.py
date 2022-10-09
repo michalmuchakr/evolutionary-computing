@@ -16,6 +16,9 @@ class Chromosome:
             fittness_function_precision
         )
 
+    def get_fitness_function_val(self):
+        return self.__fitness_function_val
+
     def __str__(self):
         return "(" + str(self.__gens[0]) + ", " + str(self.__gens[1]) + ") = " +\
                str(self.__fitness_function_val)
