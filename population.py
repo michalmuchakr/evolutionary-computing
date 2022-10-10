@@ -1,4 +1,4 @@
-import numpy as np
+import numpy
 
 from chromosome import Chromosome
 
@@ -10,6 +10,9 @@ class Population:
         self.__members = []
         self.__selected_from_population = []
         self.__population_size = population_size
+
+    def len(self):
+        return self.__population_size
 
     def set_selected_from_population(self, selected_from_population):
         self.__selected_from_population = selected_from_population
@@ -25,11 +28,11 @@ class Population:
         fittness_function_precision
     ):
         # set precision for gens in chromosome
-        np.set_printoptions(precision=chromosome_gens_precision, suppress=True)
+        numpy.set_printoptions(precision=chromosome_gens_precision, suppress=True)
 
         for member in range(self.__population_size):
             # generate chromosome with two gens
-            generated_initial_gens = np.random.uniform(
+            generated_initial_gens = numpy.random.uniform(
                 low=search_result_range_from,
                 high=search_result_range_to,
                 size=2

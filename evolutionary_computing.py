@@ -24,7 +24,10 @@ class EvolutionaryComputing:
         fittness_function_precision,
 
         # percentage the best members picked in selection
-        best_members_selection_percentage
+        best_members_selection_percentage,
+
+        #
+        tournament_selection_groups_size
     ):
         self.__population = Population(population_size)
         self.__epoch_amount = epoch_amount
@@ -32,15 +35,21 @@ class EvolutionaryComputing:
         self.__search_result_range_to = search_result_range_to
         self.__chromosome_gens_precision = chromosome_gens_precision
         self.__fittness_function_precision = fittness_function_precision
-        self.__best_members_selection_percentage = best_members_selection_percentage
+        self.__best_percentage_selection_members = best_members_selection_percentage
+        self.__tournament_selection_groups_size = tournament_selection_groups_size
 
         # calculation trigger
         self.trigger_initial_calculations()
 
-        selected_from_population = Selection.get_best_members_by_fit_function_by_percentage(
+        # selected_from_population = Selection.get_best_members_by_fit_function_by_percentage(
+        #     self.__population,
+        #     best_members_selection_percentage,
+        #     population_size
+        # )
+
+        selected_from_population = Selection.tournament_members_selection(
             self.__population,
-            best_members_selection_percentage,
-            population_size
+            tournament_selection_groups_size
         )
 
         self.__population.set_selected_from_population(selected_from_population)
@@ -58,5 +67,5 @@ class EvolutionaryComputing:
         )
 
 
-Calculation = EvolutionaryComputing(10, 10, -2.0000, 2.0000, 4, 4, 30)
+Calculation = EvolutionaryComputing(100, 100, -2.0000, 2.0000, 4, 4, 30, 7)
 Calculation.trigger_initial_calculations()
