@@ -1,27 +1,75 @@
+import math
+import random
+
 from fitness_function import fitness_function
 
 
 class Chromosome:
     # chromosome
-    __gens = []
 
-    def __init__(self, initial_gens, fittness_function_precision):
-        """
+    # binary gens for X1, X2 ['string', 'string']
+    binary_gens = []
 
-        :rtype: object
-        """
-        self.__gens = initial_gens
-        self.__fitness_function_val = round(
-            fitness_function(
-                initial_gens[0],
-                initial_gens[1]
-            ),
-            fittness_function_precision
+    # binary gens for X1, X2 ['float', 'float']
+    dec_gens = []
+
+    def __init__(self, search_result_range_from, search_result_range_to, chromosome_len):
+        self.binary_gens = self.get_initial_gens(chromosome_len)
+        self.dec_gens = self.get_dec_gen_from_binary(search_result_range_from, search_result_range_to, chromosome_len)
+
+        self.fitness_function_val = fitness_function(
+            self.dec_gens[0],
+            self.dec_gens[1]
         )
 
-    def get_fitness_function_val(self):
-        return self.__fitness_function_val
+    def binary_to_decimal(self, a, search_result_range_to):
+        pass
 
-    def __str__(self):
-        return "(" + str(self.__gens[0]) + ", " + str(self.__gens[1]) + ") = " + \
-               str(self.__fitness_function_val)
+    def get_fitness_function_val(self):
+        return self.fitness_function_val
+
+    def str(self):
+        return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + \
+               str(self.fitness_function_val)
+
+    @staticmethod
+    def generate_chromosome_bin(chromosome_len):
+        random_gene = ""
+
+        for _ in range(chromosome_len):
+            random_gene += str(random.randint(0, 1))
+
+        return random_gene
+
+    @staticmethod
+    def get_chromosome_len(search_result_range_from, search_result_range_to):
+        return int(math.log2((search_result_range_to - search_result_range_from) * pow(10, 6)))
+
+    @staticmethod
+    def decode_binary_value_to_decimal(binary_to_decode,
+                                       search_result_range_from,
+                                       search_result_range_to,
+                                       chromosome_len):
+        return search_result_range_from + int(binary_to_decode, 2) * (
+            search_result_range_to - search_result_range_from) / (pow(2, chromosome_len) - 1)
+
+    def get_initial_gens(self, chromosome_len):
+        initial_gens = []
+
+        for member in range(2):
+            initial_gens.append(self.generate_chromosome_bin(chromosome_len))
+
+        return initial_gens
+
+    def get_dec_gen_from_binary(self, search_result_range_from, search_result_range_to, chromosome_len):
+        initial_dec_gens = []
+
+        for index in range(2):
+            initial_dec_gens.append(
+                self.decode_binary_value_to_decimal(self.binary_gens[index],
+                                                    search_result_range_from,
+                                                    search_result_range_to,
+                                                    chromosome_len
+                                                    ))
+
+        return initial_dec_gens
