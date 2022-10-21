@@ -34,7 +34,7 @@ class Chromosome:
 
     @staticmethod
     def generate_chromosome_bin(chromosome_len):
-        return ''.join([str(random.randint(0, 1)) for _ in range(chromosome_len)])
+        return [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
 
     @staticmethod
     def get_chromosome_len(search_result_range_from, search_result_range_to):
@@ -45,7 +45,8 @@ class Chromosome:
                                         search_result_range_from,
                                         search_result_range_to,
                                         chromosome_len):
-        return search_result_range_from + int(binary_to_decode, 2) * (
+        binary_string = ''.join(map(lambda value: '0' if value == False else '1', binary_to_decode))
+        return search_result_range_from + int(binary_string, 2) * (
             search_result_range_to - search_result_range_from) / (pow(2, chromosome_len) - 1)
 
     def get_initial_gens(self, chromosome_len):
