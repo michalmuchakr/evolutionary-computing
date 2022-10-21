@@ -1,6 +1,6 @@
 import math
 
-from utility import split_list_into_chunks
+from utils.split_into_chunks import split_list_into_chunks
 
 
 class Selection:
