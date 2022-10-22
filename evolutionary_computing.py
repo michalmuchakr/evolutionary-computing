@@ -56,4 +56,3 @@ class EvolutionaryComputing:
 
 
 Calculation = EvolutionaryComputing(10, 10, -2.0000, 2.0000, 3, 2)
-Calculation.trigger_initial_calculations()

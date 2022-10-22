@@ -1,5 +1,5 @@
 from chromosome import Chromosome
-
+from fitness_function import fitness_function
 
 class Population:
     members = []
@@ -29,7 +29,7 @@ class Population:
 
         for member in range(self.population_size):
             generated_chromosome = Chromosome(
-                search_result_range_from, search_result_range_to, chromosome_len)
+                search_result_range_from, search_result_range_to, chromosome_len, fitness_function)
 
             self.members.append(generated_chromosome)
 

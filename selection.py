@@ -13,7 +13,7 @@ class Selection:
         # calc fin fun sum for all members
         all_members_fit_fun_sum = 0
         for member in population_to_select_from_members:
-            all_members_fit_fun_sum += 1 / member.get_fitness_function_val()
+            all_members_fit_fun_sum += 1 / member.value
 
         # Calc probability and distributor for each population member
         # members_roulette_probability_distributor = [[probability, distributor]]
@@ -23,7 +23,7 @@ class Selection:
             member_probability_distributor = []
 
             # probability
-            member_probability = (1 / member.get_fitness_function_val()) / all_members_fit_fun_sum
+            member_probability = (1 / member.value) / all_members_fit_fun_sum
             member_probability_distributor.append(member_probability)
 
             # distributor
@@ -72,6 +72,6 @@ class Selection:
         # sort population members in ascending order
         sorted_population = sorted(
             population_to_be_sorted,
-            key=lambda member: member.get_fitness_function_val()
+            key=lambda member: member.value
         )
         return sorted_population
