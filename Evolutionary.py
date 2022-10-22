@@ -1,8 +1,7 @@
-from population import Population
-from selection import Selection
+from Population import Population
+from Selection import Selection
 
-
-class EvolutionaryComputing:
+class Evolutionary:
     # Class that will trigger Evolutionary Computing calculation
 
     def __init__(
@@ -12,7 +11,8 @@ class EvolutionaryComputing:
         search_result_range_from,
         search_result_range_to,
         best_members_selection_percentage,
-        tournament_selection_groups_size
+        tournament_selection_groups_size,
+
     ):
         """
         Attributes:
@@ -29,9 +29,6 @@ class EvolutionaryComputing:
         self.search_result_range_to = search_result_range_to
         self.best_percentage_selection_members = best_members_selection_percentage
         self.tournament_selection_groups_size = tournament_selection_groups_size
-
-        # calculation trigger
-        self.trigger_initial_calculations()
 
     def trigger_initial_calculations(self):
         self.population.generate_random_population(
@@ -55,4 +52,5 @@ class EvolutionaryComputing:
         self.population.set_selected_from_population(selected_from_population)
 
 
-Calculation = EvolutionaryComputing(10, 10, -2.0000, 2.0000, 3, 2)
+calculation = Evolutionary(10, 10, -2.0000, 2.0000, 3, 2)
+calculation.trigger_initial_calculations()

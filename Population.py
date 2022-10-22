@@ -1,4 +1,4 @@
-from chromosome import Chromosome
+from Chromosome import Chromosome
 from fitness_function import fitness_function
 
 class Population:
