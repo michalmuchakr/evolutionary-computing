@@ -22,15 +22,15 @@ class Chromosome:
             self.dec_gens[1]
         )
 
+    def __str__(self):
+        return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + \
+                str(self.fitness_function_val)
+
     def binary_to_decimal(self, a, search_result_range_to):
         pass
 
     def get_fitness_function_val(self):
         return self.fitness_function_val
-
-    def str(self):
-        return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + \
-                str(self.fitness_function_val)
 
     @staticmethod
     def generate_chromosome_bin(chromosome_len):
