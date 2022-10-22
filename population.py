@@ -11,6 +11,9 @@ class Population:
     def __len__(self):
         return self.population_size
 
+    def __str__(self):
+        return "Population size: " + self.population_size
+
     def set_selected_from_population(self, selected_from_population):
         self.selected_from_population = selected_from_population
 
@@ -37,6 +40,3 @@ class Population:
     def print_selected_from_population(self):
         for member in self.selected_from_population:
             print(member)
-
-    def str(self):
-        return "Population size: " + self.population_size
