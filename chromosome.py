@@ -5,13 +5,8 @@ from fitness_function import fitness_function
 
 
 class Chromosome:
-    # chromosome
-
-    # binary gens for X1, X2 ['string', 'string']
-    binary_gens = []
-
-    # binary gens for X1, X2 ['float', 'float']
-    dec_gens = []
+    binary_gens = [] # binary gens for X1, X2 [[bool], [bool]]
+    dec_gens = [] # decimal gens for X1, X2 [float, float]
 
     def __init__(self, search_result_range_from, search_result_range_to, chromosome_len):
         self.binary_gens = self.get_initial_gens(chromosome_len)
