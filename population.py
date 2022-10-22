@@ -2,14 +2,13 @@ from chromosome import Chromosome
 
 
 class Population:
-    # population
     members = []
     selected_from_population = []
 
     def __init__(self, population_size):
         self.population_size = population_size
 
-    def len(self):
+    def __len__(self):
         return self.population_size
 
     def set_selected_from_population(self, selected_from_population):
