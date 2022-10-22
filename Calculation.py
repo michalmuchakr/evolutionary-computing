@@ -31,7 +31,7 @@ class Calculation:
         self.best_percentage_selection_members = best_members_selection_percentage
         self.tournament_selection_groups_size = tournament_selection_groups_size
 
-    def trigger_initial_calculations(self):
+    def trigger(self):
         self.population.generate_random_population(
             self.search_result_range_from,
             self.search_result_range_to,
@@ -51,7 +51,3 @@ class Calculation:
         selected_from_population = Selection.roulette_wheel_members_selection(self.population)
 
         self.population.set_selected_from_population(selected_from_population)
-
-
-calculation = Calculation(10, 10, -2.0000, 2.0000, 3, 2)
-calculation.trigger_initial_calculations()
