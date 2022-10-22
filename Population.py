@@ -1,3 +1,5 @@
+import math
+
 from Chromosome import Chromosome
 from fitness_function import fitness_function
 
@@ -40,3 +42,27 @@ class Population:
     def print_selected_from_population(self):
         for member in self.selected_from_population:
             print(member)
+
+    def __elite_strategy(self, size):
+        """
+        Attributes:
+            size: percentage size of population to maintain
+        """
+        # calculate how many mebers should be kept
+        amount = math.ceil(len(self.members) * size)
+        # sort array and get the best
+        sorted_members = sorted(self.members)
+        selected_members = sorted_members[-amount:len(sorted_members)]
+        return amount, selected_members
+
+    def evolve(self):
+        # strategy
+        amount, maintained_members = self.__elite_strategy(0.3)
+
+        # selection
+
+        # crossing
+
+        # mutation
+
+        #inversion
