@@ -4,7 +4,7 @@ import random
 from utils.binary_to_decimal import binary_to_decimal
 
 class Chromosome:
-    binary_gens = [] # binary gens for X1, X2 [[bool], [bool]]
+    _binary_gens = [] # binary gens for X1, X2 [[bool], [bool]]
     dec_gens = [] # decimal gens for X1, X2 [float, float]
     value = 0
 
@@ -24,6 +24,14 @@ class Chromosome:
 
     def __str__(self):
         return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + str(self.value)
+
+    @property
+    def binary_gens(self):
+        return self._binary_gens
+
+    @binary_gens.setter
+    def binary_gens(self, new_binary_gens):
+        self._binary_gens = new_binary_gens
 
     def init_gens(self, chromosome_len):
         gen = [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
