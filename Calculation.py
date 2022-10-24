@@ -1,5 +1,5 @@
 from Population import Population
-from Selection import Selection
+from selection import RouletteSelection
 
 class Calculation:
     """
@@ -50,7 +50,8 @@ class Calculation:
         #     self.population,
         #     self.tournament_selection_groups_size
         # )
-
-        selected_from_population = Selection.roulette_wheel_members_selection(self.population)
+        selection = RouletteSelection()
+        selected_from_population = selection.select(self.population)
+        print(selected_from_population)
 
         self.population.set_selected_from_population(selected_from_population)
