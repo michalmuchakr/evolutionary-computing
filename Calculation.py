@@ -27,13 +27,12 @@ class Calculation:
             selection: type of selection
             fitness: fitness function
         """
-        self.population = Population(population_size)
+        self.population = Population(population_size, selection)
         self.epoch_amount = epoch_amount
         self.search_result_range_from = search_result_range_from
         self.search_result_range_to = search_result_range_to
         self.best_percentage_selection_members = best_members_selection_percentage
         self.tournament_selection_groups_size = tournament_selection_groups_size
-        self._selection = selection
         self.fitness = fitness
 
     def trigger(self):
@@ -42,6 +41,6 @@ class Calculation:
             self.search_result_range_to,
         )
 
-        selected = self._selection.select(self.population)
+        self.population.evolve()
 
         # self.population.set_selected_from_population(selected_from_population)

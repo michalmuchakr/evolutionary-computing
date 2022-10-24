@@ -1,17 +1,21 @@
 import math
+from typing import List
 
 from Chromosome import Chromosome
 from functions.goldstein_price import goldstein_price
+from selection import SelectionStrategy
+from utils.sort_population import sort_population
 
 class Population:
-    all_members = []
+    all_members: List[Chromosome] = []
     selected_from_population = []
     saved_members = []
     operational_members = []
     population_size = 0
 
-    def __init__(self, population_size):
+    def __init__(self, population_size, selection: SelectionStrategy):
         self.population_size = population_size
+        self._selection = selection
 
     def __len__(self):
         return self.population_size
@@ -30,7 +34,7 @@ class Population:
         search_result_range_from,
         search_result_range_to,
     ):
-        chromosome_len = Chromosome.get_chromosome_len(search_result_range_from, search_result_range_to)
+        chromosome_len = Chromosome.calc_length(search_result_range_from, search_result_range_to)
 
         for member in range(self.population_size):
             generated_chromosome = Chromosome(
@@ -54,7 +58,7 @@ class Population:
         # calculate how many mebers should be kept
         amount = math.ceil(len(self.all_members) * size)
         # sort array and get the best
-        sorted_members = sorted(self.all_members)
+        sorted_members = sort_population(self.all_members)
         self.saved_members = sorted_members[-amount:len(sorted_members)]
         self.operational_members = sorted_members[:-amount]
 
@@ -62,12 +66,15 @@ class Population:
 
     def evolve(self):
         # strategy
-        amount, maintained_members, operational_members = self.__elite_strategy(0.3)
+        self.__elite_strategy(0.3)
 
         # selection
+        selected = self._selection.select(self.all_members)
 
         # crossing
 
         # mutation
 
         #inversion
+
+        print(selected)

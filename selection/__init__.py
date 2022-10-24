@@ -11,7 +11,7 @@ class SelectionStrategy(ABC):
 
 class RouletteSelection(SelectionStrategy):
     def select(self, members):
-        population_to_select_from_members = members.get_members()
+        population_to_select_from_members = members
 
         # calc fin fun sum for all members
         all_members_fit_fun_sum = 0
@@ -45,8 +45,7 @@ class TournamentSelection(SelectionStrategy):
         self._group_size = group_size
 
     def select(self, members):
-        chunked_population_for_tournament = split_list_into_chunks(members.get_members(),
-                                                                    self._group_size)
+        chunked_population_for_tournament = split_list_into_chunks(members, self._group_size)
 
         # sort chunks by fit function
         for index, tournament_chunk in enumerate(chunked_population_for_tournament):
@@ -66,7 +65,7 @@ class BestFitSelection(SelectionStrategy):
         self._population_size = population_size
 
     def select(self, members):
-        population_to_select_from_members = members.get_members()
+        population_to_select_from_members = members
         sorted_population = sort_population(population_to_select_from_members)
         last_best_member_index = math.floor(self._population_size * self._percentage_selection / 100)
 

@@ -16,10 +16,10 @@ class Chromosome:
             lenght: lenght of the chromosome
             fitness: fitness function
         """
-        self.binary_gens = self.init_gens(lenght)
+        self.binary_gens = self.__generate(lenght)
         self.left_limit = left_limit
         self.right_limit = right_limit
-        self.dec_gens = self.get_dec_gen_from_binary()
+        self.dec_gens = self.__bin_to_decimal()
         self.value = fitness(self.dec_gens[0],self.dec_gens[1])
 
     def __str__(self):
@@ -33,13 +33,13 @@ class Chromosome:
     def binary_gens(self, new_binary_gens):
         self._binary_gens = new_binary_gens
 
-    def init_gens(self, chromosome_len):
+    def __generate(self, chromosome_len):
         gen = [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
         return [gen, gen]
 
-    def get_dec_gen_from_binary(self):
+    def __bin_to_decimal(self):
         return [binary_to_decimal(self.binary_gens[index], self.left_limit, self.right_limit) for index in range(2)]
 
     @staticmethod
-    def get_chromosome_len(search_result_range_from, search_result_range_to):
+    def calc_length(search_result_range_from, search_result_range_to):
         return int(math.log2((search_result_range_to - search_result_range_from) * pow(10, 6)))
