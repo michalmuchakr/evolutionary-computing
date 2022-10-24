@@ -1,7 +1,7 @@
 import math
 
 from Chromosome import Chromosome
-from fitness_function import fitness_function
+from functions.goldstein_price import goldstein_price
 
 class Population:
     members = []
@@ -31,7 +31,7 @@ class Population:
 
         for member in range(self.population_size):
             generated_chromosome = Chromosome(
-                search_result_range_from, search_result_range_to, chromosome_len, fitness_function)
+                search_result_range_from, search_result_range_to, chromosome_len, goldstein_price)
 
             self.members.append(generated_chromosome)
 
