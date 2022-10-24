@@ -1,5 +1,4 @@
 from Population import Population
-from selection import RouletteSelection
 
 class Calculation:
     """
@@ -14,6 +13,7 @@ class Calculation:
         search_result_range_to,
         best_members_selection_percentage,
         tournament_selection_groups_size,
+        selection,
         fitness
     ):
         """
@@ -24,6 +24,7 @@ class Calculation:
             search_result_range_to: fit function renge end for x1 and x2
             best_members_selection_percentage: percentage the best members picked in selection
             tournament_selection_groups_size: population chunks size while select tournament
+            selection: type of selection
             fitness: fitness function
         """
         self.population = Population(population_size)
@@ -32,6 +33,7 @@ class Calculation:
         self.search_result_range_to = search_result_range_to
         self.best_percentage_selection_members = best_members_selection_percentage
         self.tournament_selection_groups_size = tournament_selection_groups_size
+        self._selection = selection
         self.fitness = fitness
 
     def trigger(self):
@@ -40,18 +42,6 @@ class Calculation:
             self.search_result_range_to,
         )
 
-        # selected_from_population = Selection.get_best_members_by_fit_function_by_percentage(
-        #     self.population,
-        #     best_members_selection_percentage,
-        #     population_size
-        # )
+        selected = self._selection.select(self.population)
 
-        # selected_from_population = Selection.tournament_members_selection(
-        #     self.population,
-        #     self.tournament_selection_groups_size
-        # )
-        selection = RouletteSelection()
-        selected_from_population = selection.select(self.population)
-        print(selected_from_population)
-
-        self.population.set_selected_from_population(selected_from_population)
+        # self.population.set_selected_from_population(selected_from_population)

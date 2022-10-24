@@ -1,5 +1,6 @@
 from Calculation import Calculation
 from functions.goldstein_price import goldstein_price
+from selection import RouletteSelection
 
 EPOCH_AMOUNT = 10
 POPULATION_SIZE = 10
@@ -15,6 +16,7 @@ if __name__ == "__main__":
         LIMIT[1],
         BEST_MEMBERS_SELECTION_PERCENTAGE,
         TOURNAMENT_SELECTION_GROUP_SIZE,
+        RouletteSelection(),
         goldstein_price
     )
     calculation.trigger()
