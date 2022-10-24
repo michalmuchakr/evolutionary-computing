@@ -36,11 +36,7 @@ class Calculation:
         self.fitness = fitness
 
     def trigger(self):
-        self.population.generate_random_population(
-            self.search_result_range_from,
-            self.search_result_range_to,
-        )
+        self.population.generate(self.search_result_range_from, self.search_result_range_to)
 
         self.population.evolve()
 
-        # self.population.set_selected_from_population(selected_from_population)

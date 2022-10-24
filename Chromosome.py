@@ -16,14 +16,11 @@ class Chromosome:
             lenght: lenght of the chromosome
             fitness: fitness function
         """
-        self.binary_gens = self.__generate(lenght)
+        self._binary_gens = self.__generate(lenght)
         self.left_limit = left_limit
         self.right_limit = right_limit
         self.dec_gens = self.__bin_to_decimal()
-        self.value = fitness(self.dec_gens[0],self.dec_gens[1])
-
-    def __str__(self):
-        return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + str(self.value)
+        self.value = fitness(self.dec_gens[0], self.dec_gens[1])
 
     @property
     def binary_gens(self):
