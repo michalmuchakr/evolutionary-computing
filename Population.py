@@ -4,8 +4,11 @@ from Chromosome import Chromosome
 from functions.goldstein_price import goldstein_price
 
 class Population:
-    members = []
+    all_members = []
     selected_from_population = []
+    saved_members = []
+    operational_members = []
+    population_size = 0
 
     def __init__(self, population_size):
         self.population_size = population_size
@@ -20,7 +23,7 @@ class Population:
         self.selected_from_population = selected_from_population
 
     def get_members(self):
-        return self.members
+        return self.all_members
 
     def generate_random_population(
         self,
@@ -33,7 +36,7 @@ class Population:
             generated_chromosome = Chromosome(
                 search_result_range_from, search_result_range_to, chromosome_len, goldstein_price)
 
-            self.members.append(generated_chromosome)
+            self.all_members.append(generated_chromosome)
 
     def print_population(self):
         for member in self.members:
@@ -49,15 +52,17 @@ class Population:
             size: percentage size of population to maintain
         """
         # calculate how many mebers should be kept
-        amount = math.ceil(len(self.members) * size)
+        amount = math.ceil(len(self.all_members) * size)
         # sort array and get the best
-        sorted_members = sorted(self.members)
-        selected_members = sorted_members[-amount:len(sorted_members)]
-        return amount, selected_members
+        sorted_members = sorted(self.all_members)
+        self.saved_members = sorted_members[-amount:len(sorted_members)]
+        self.operational_members = sorted_members[:-amount]
+
+        return amount, self.saved_members, self.operational_members
 
     def evolve(self):
         # strategy
-        amount, maintained_members = self.__elite_strategy(0.3)
+        amount, maintained_members, operational_members = self.__elite_strategy(0.3)
 
         # selection
 
