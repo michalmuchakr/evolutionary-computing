@@ -1,6 +1,3 @@
-from random import random
-
-
 import random
 
 def inversion(array, probability):
