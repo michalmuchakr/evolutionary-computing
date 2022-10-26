@@ -7,25 +7,22 @@ class EvolutionaryComputing:
 
     def __init__(
         self,
-        
-        # amount of epochs in calculation
         epoch_amount,
-
-        # amount of population members
         population_size,
-
-        # fit function renge start for x1 and x2
         search_result_range_from,
-
-        # fit function renge end for x1 and x2
         search_result_range_to,
-
-        # percentage the best members picked in selection
         best_members_selection_percentage,
-
-        # population chunks size while select tournament
         tournament_selection_groups_size
     ):
+        """
+        Attributes:
+            epoch_amount: amount of epochs in calculation
+            population_size: amount of population members
+            search_result_range_from: fit function renge start for x1 and x2
+            search_result_range_to: fit function renge end for x1 and x2
+            best_members_selection_percentage: percentage the best members picked in selection
+            tournament_selection_groups_size: population chunks size while select tournament
+        """
         self.population = Population(population_size)
         self.epoch_amount = epoch_amount
         self.search_result_range_from = search_result_range_from

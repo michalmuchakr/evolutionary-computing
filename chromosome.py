@@ -30,16 +30,11 @@ class Chromosome:
 
     def str(self):
         return "(" + str(self.binary_gens[0]) + ", " + str(self.binary_gens[1]) + ") = " + \
-               str(self.fitness_function_val)
+                str(self.fitness_function_val)
 
     @staticmethod
     def generate_chromosome_bin(chromosome_len):
-        random_gene = ""
-
-        for _ in range(chromosome_len):
-            random_gene += str(random.randint(0, 1))
-
-        return random_gene
+        return [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
 
     @staticmethod
     def get_chromosome_len(search_result_range_from, search_result_range_to):
@@ -47,29 +42,20 @@ class Chromosome:
 
     @staticmethod
     def decode_binary_value_to_decimal(binary_to_decode,
-                                       search_result_range_from,
-                                       search_result_range_to,
-                                       chromosome_len):
-        return search_result_range_from + int(binary_to_decode, 2) * (
+                                        search_result_range_from,
+                                        search_result_range_to,
+                                        chromosome_len):
+        binary_string = ''.join(map(lambda value: '0' if value == False else '1', binary_to_decode))
+        return search_result_range_from + int(binary_string, 2) * (
             search_result_range_to - search_result_range_from) / (pow(2, chromosome_len) - 1)
 
     def get_initial_gens(self, chromosome_len):
-        initial_gens = []
-
-        for member in range(2):
-            initial_gens.append(self.generate_chromosome_bin(chromosome_len))
-
-        return initial_gens
+        initial_gen = self.generate_chromosome_bin(chromosome_len)
+        return [initial_gen, initial_gen]
 
     def get_dec_gen_from_binary(self, search_result_range_from, search_result_range_to, chromosome_len):
-        initial_dec_gens = []
-
-        for index in range(2):
-            initial_dec_gens.append(
-                self.decode_binary_value_to_decimal(self.binary_gens[index],
+        return [self.decode_binary_value_to_decimal(self.binary_gens[index],
                                                     search_result_range_from,
                                                     search_result_range_to,
                                                     chromosome_len
-                                                    ))
-
-        return initial_dec_gens
+                                                    ) for index in range(2)]
