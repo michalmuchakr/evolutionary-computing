@@ -39,4 +39,3 @@ class Calculation:
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
 
         self.population.evolve()
-

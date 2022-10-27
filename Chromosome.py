@@ -8,15 +8,15 @@ class Chromosome:
     dec_gens = [] # decimal gens for X1, X2 [float, float]
     value = 0
 
-    def __init__(self, left_limit, right_limit, lenght, fitness):
+    def __init__(self, left_limit, right_limit, length, fitness):
         """
         Attributes:
-            lefy_limit: lower limit of the final value
+            left_limit: lower limit of the final value
             right_limit: upper limit of the final value
-            lenght: lenght of the chromosome
+            length: length of the chromosome
             fitness: fitness function
         """
-        self._binary_gens = self.__generate(lenght)
+        self._binary_gens = self.__generate(length)
         self.left_limit = left_limit
         self.right_limit = right_limit
         self.dec_gens = self.__bin_to_decimal()
@@ -30,7 +30,8 @@ class Chromosome:
     def binary_gens(self, new_binary_gens):
         self._binary_gens = new_binary_gens
 
-    def __generate(self, chromosome_len):
+    @staticmethod
+    def __generate(chromosome_len):
         gen = [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
         return [gen, gen]
 

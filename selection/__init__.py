@@ -4,10 +4,12 @@ import math
 from utils.split_into_chunks import split_list_into_chunks
 from utils.sort_population import sort_population
 
+
 class SelectionStrategy(ABC):
     @abstractmethod
     def select(self, members):
         pass
+
 
 class RouletteSelection(SelectionStrategy):
     def select(self, members):
@@ -40,6 +42,7 @@ class RouletteSelection(SelectionStrategy):
 
         return members_roulette_probability_distributor
 
+
 class TournamentSelection(SelectionStrategy):
     def __init__(self, group_size):
         self._group_size = group_size
@@ -58,6 +61,7 @@ class TournamentSelection(SelectionStrategy):
             chunked_population_for_tournament[index] = chunked_population_for_tournament[index][0]
 
         return chunked_population_for_tournament
+
 
 class BestFitSelection(SelectionStrategy):
     def __init__(self, percentage_selection, population_size):

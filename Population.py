@@ -6,6 +6,7 @@ from functions.goldstein_price import goldstein_price
 from selection import SelectionStrategy
 from utils.sort_population import sort_population
 
+
 class Population:
     _chromosomes: List[Chromosome] = []
     _size: int = 0
@@ -16,7 +17,8 @@ class Population:
 
     def generate(self, left_limit, right_limit):
         chromosome_len = Chromosome.calc_length(left_limit, right_limit)
-        self._chromosomes = [Chromosome(left_limit, right_limit, chromosome_len, goldstein_price) for _ in range(self._size)]
+        self._chromosomes = [Chromosome(left_limit, right_limit, chromosome_len, goldstein_price) for _ in
+                             range(self._size)]
 
     def __elite_strategy(self, size):
         """
@@ -43,7 +45,7 @@ class Population:
 
         # mutation
 
-        #inversion
+        # inversion
 
         # assign to _chromosomes
 
