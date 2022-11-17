@@ -5,6 +5,8 @@ from Chromosome import Chromosome
 from functions.goldstein_price import goldstein_price
 from selection import SelectionStrategy
 from utils.sort_population import sort_population
+from Crossing import Crossing
+from Mutation import Mutation
 
 
 class Population:
@@ -36,14 +38,24 @@ class Population:
 
     def evolve(self):
         # strategy
-        amount, saved_chromosomes, operational_chromosomes = self.__elite_strategy(0.1)
+
+        amount, saved_chromosomes, operational_chromosomes = self.__elite_strategy(0.2)
 
         # selection
         selected = self._selection.select(operational_chromosomes)
 
-        # crossing
+        # crossingn
+        #to select the type of crossover type in (1,2,3)"crossed.call_crossover_functions(3)"
+        crossed = Crossing(operational_chromosomes,0.5,self._size)
+        crossed.call_crossover_functions(1)
+        member_after_crossing = crossed.member_after_crossing_one_point
 
         # mutation
+        mutated = Mutation(member_after_crossing,0.1)
+        #mutated.homogeneous_mutation()
+        #mutated.edge_mutation()
+        mutated.two_point_mutation()
+        print(mutated.member_after_mutation)
 
         # inversion
 
@@ -51,3 +63,7 @@ class Population:
 
         # TODO: remove after developing
         print(selected)
+
+        #dana iteracja wynik
+
+
