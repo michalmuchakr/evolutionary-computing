@@ -3,7 +3,6 @@ import random
 class Inversion:
     def __init__(self, probability):
         self.probability = probability
-        self.inverted_population = []
 
     @staticmethod
     def inversion(array, probability, index_element, chromosome_index):
@@ -22,7 +21,7 @@ class Inversion:
         return array[0:start] + fragment + array[end:]
 
     def inversion_in_population(self, population_after_mutation):
-        self.inverted_population = [
+        return [
             [self.inversion(chromosome[index_element], self.probability, index_element, chromosome_index)
                 for index_element in range(2)]
             for chromosome_index, chromosome in enumerate(population_after_mutation)

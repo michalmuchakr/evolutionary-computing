@@ -12,9 +12,11 @@ class Calculation:
         population_size,
         search_result_range_from,
         search_result_range_to,
+        elite_percentage,
         best_members_selection_percentage,
         tournament_selection_groups_size,
         selection,
+        crossing,
         fitness
     ):
         """
@@ -32,11 +34,12 @@ class Calculation:
         self.epoch_amount = epoch_amount
         self.search_result_range_from = search_result_range_from
         self.search_result_range_to = search_result_range_to
+        self.elite_percentage = elite_percentage
         self.best_percentage_selection_members = best_members_selection_percentage
         self.tournament_selection_groups_size = tournament_selection_groups_size
+        self.crossing = crossing
         self.fitness = fitness
 
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
-
-        self.population.evolve(self.fitness)
+        self.population.evolve(self.fitness, self.crossing, self.epoch_amount, self.elite_percentage)

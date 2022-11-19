@@ -1,10 +1,13 @@
 from Calculation import Calculation
+from crorrsing import OnePointCrossing
 from functions.goldstein_price import goldstein_price
 from selection import RouletteSelection
 
 USER_SELECTION = 'RouletteSelection'
+USER_CROSSING = 'OnePoint'
 EPOCH_AMOUNT = 10
 POPULATION_SIZE = 10
+ELITE_PERCENTAGE = 20
 LIMIT = [-2, 2]
 BEST_MEMBERS_SELECTION_PERCENTAGE = 3
 TOURNAMENT_SELECTION_GROUP_SIZE = 2
@@ -15,7 +18,7 @@ selection_dictionary = {
 }
 
 crossing_dictionary = {
-    "OnePoint": 1
+    "OnePoint": OnePointCrossing()
 }
 
 if __name__ == "__main__":
@@ -24,9 +27,11 @@ if __name__ == "__main__":
         POPULATION_SIZE,
         LIMIT[0],
         LIMIT[1],
+        ELITE_PERCENTAGE,
         BEST_MEMBERS_SELECTION_PERCENTAGE,
         TOURNAMENT_SELECTION_GROUP_SIZE,
         selection_dictionary[USER_SELECTION],
-        goldstein_price
+        crossing_dictionary[USER_CROSSING],
+        goldstein_price,
     )
     calculation.trigger()

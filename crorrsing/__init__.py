@@ -1,4 +1,5 @@
 import random
+from abc import ABC, abstractmethod
 
 
 class Crossing:
@@ -11,8 +12,8 @@ class Crossing:
         self.size = size
         self.elite_members_amount = elite_members_amount
 
-        for i in self.list_of_object_gens:
-            self.list_of_individuals_after_selection.append(i.binary_gens)
+        for gen_item in self.list_of_object_gens:
+            self.list_of_individuals_after_selection.append(gen_item.binary_gens)
 
     def one_point_crossing(self, place_of_crossing, binary_value_for_the_draw_of_one,
                            binary_value_for_the_draw_of_second):
@@ -93,6 +94,8 @@ class Crossing:
         self.member_after_crossing_one_point.append([second_chromosome_first_chunk, second_chromosome_second_chunk])
 
     def call_crossover_functions(self, which_function):
+        # print(self.member_after_crossing_one_point)
+
         while len(self.member_after_crossing_one_point) != self.size - self.elite_members_amount:
 
             # losuje 2 osobnikow do krzyzowania
@@ -141,3 +144,27 @@ class Crossing:
                     break
             else:
                 pass
+
+
+class CrossingStrategy(ABC):
+    @abstractmethod
+    def cross(self, members, probability):
+        pass
+
+
+def cross_item(member, probability):
+    # TODO if not crossing because of random.random() draw again
+    if random.random() > probability: return [member.binary_gens[0], member.binary_gens[0]]
+
+    crossing_point = random.randint(0, len(member.binary_gens[0]) - 1)
+
+    #  member
+    crossed_genes = [not member_genes for member_genes in member.binary_gens[0][:crossing_point]] \
+                    + [member_genes for member_genes in member.binary_gens[0][crossing_point:]]
+
+    return [crossed_genes, crossed_genes]
+
+
+class OnePointCrossing(CrossingStrategy):
+    def cross(self, members, probability):
+        return [cross_item(member, probability) for member in members]

@@ -36,8 +36,10 @@ class Chromosome:
         if len(initial_binary_gens) > 0:
             return initial_binary_gens
         else:
-            gen = [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
-            return [gen, gen]
+            return [
+                [bool(random.randint(0, 1)) for _ in range(chromosome_len)]
+                for _ in range(2)
+            ]
 
     def __bin_to_decimal(self):
         return [binary_to_decimal(self.binary_gens[index], self.left_limit, self.right_limit) for index in range(2)]
