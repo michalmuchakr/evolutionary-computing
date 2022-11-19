@@ -42,7 +42,6 @@ class RouletteSelection(SelectionStrategy):
 
         return members_roulette_probability_distributor
 
-
 class TournamentSelection(SelectionStrategy):
     def __init__(self, group_size):
         self._group_size = group_size

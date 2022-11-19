@@ -1,4 +1,5 @@
 def sort_population(members):
+    # TODO max vs min update
     # sort population members in ascending order
     sorted_population = sorted(
         members,

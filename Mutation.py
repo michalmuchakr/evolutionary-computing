@@ -21,7 +21,6 @@ class Mutation:
                 self.member_after_mutation.append(i)
 
     def edge_mutation(self):
-
         for i in self.member_after_crossing:
             probability_of_mutation_tmp = random.uniform(0, 1)
             if probability_of_mutation_tmp < self.probability_of_mutation:

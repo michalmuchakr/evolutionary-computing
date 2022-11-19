@@ -1,5 +1,6 @@
 from Population import Population
 
+
 class Calculation:
     """
     Class for Evolutionary Computing calculation
@@ -38,4 +39,4 @@ class Calculation:
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
 
-        self.population.evolve()
+        self.population.evolve(self.fitness)
