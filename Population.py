@@ -11,6 +11,7 @@ from inversion import Inversion
 
 
 class Population:
+    _calculation_results = []
     _chromosomes: List[Chromosome] = []
     _size: int = 0
 
@@ -49,34 +50,33 @@ class Population:
 
     def get_best_value(self, epoch_index):
         sorted_population = sort_population(self._chromosomes)
-        return epoch_index + 1, sorted_population[-1].dec_gens[0], sorted_population[-1].dec_gens[1], sorted_population[-1].value
+        return epoch_index + 1, \
+               sorted_population[-1].dec_gens[0], \
+               sorted_population[-1].dec_gens[1], \
+               sorted_population[-1].value
 
     def evolve(self, fitness, crossing, epoch_amount, elite_percentage):
-
-        value_results = []
-
         for epoch_index in range(epoch_amount):
-
             # 1. strategy
             elite_members_amount, saved_elite_chromosomes, operational_chromosomes = \
                 self.__elite_strategy(elite_percentage / 100)
 
             to_be_selected_amount = math.ceil((self._size * ((100 - elite_percentage) / 100)) / 2)
 
-            # selection
+            # 2. selection
             # TODO all population members
-            selected = self._selection.select(self._chromosomes, to_be_selected_amount)
+            selected = self._selection.select(operational_chromosomes, to_be_selected_amount)
 
-            # crossingn
+            # 3. crossing
             # to select the type of crossover type in (1,2,3)"crossed.call_crossover_functions(3)"
 
-            # member_after_crossing = crossing.cross(selected, 0.5)
+            member_after_crossing = crossing.cross(selected, 0.5)
 
-            crossed = Crossing(selected, 0.8, self._size, elite_members_amount)
-            crossed.call_crossover_functions(3)
+            # crossed = Crossing(selected, 0.8, self._size, elite_members_amount)
+            # crossed.call_crossover_functions(3)
 
             # crossed.member_after_crossing_one_point - after crossing
-            member_after_crossing = crossed.member_after_crossing_one_point
+            # member_after_crossing = crossed.member_after_crossing_one_point
 
             # mutation
             mutated = Mutation(member_after_crossing, 0.8)
@@ -105,7 +105,6 @@ class Population:
             # X1, X2, FitFun(x1, x2), srednie odchylenie standardowe dla całej populacji
             # -> baza danych
 
-            value_results.append(self.get_best_value(epoch_index))
-            # dana iteracja wynik
+            self._calculation_results.append(self.get_best_value(epoch_index))
 
-        print(value_results)
+        print(self._calculation_results[-1])

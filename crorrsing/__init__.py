@@ -152,19 +152,28 @@ class CrossingStrategy(ABC):
         pass
 
 
-def cross_item(member, probability):
-    # TODO if not crossing because of random.random() draw again
-    if random.random() > probability: return [member.binary_gens[0], member.binary_gens[0]]
+def get_genes_crossed_one_point(member, next_member, crossing_point, gene_x_index):
+    return member.binary_gens[gene_x_index][:crossing_point] \
+           + next_member.binary_gens[gene_x_index][crossing_point:]
 
+
+def cross_item_one_point(member, next_member):
     crossing_point = random.randint(0, len(member.binary_gens[0]) - 1)
 
-    #  member
-    crossed_genes = [not member_genes for member_genes in member.binary_gens[0][:crossing_point]] \
-                    + [member_genes for member_genes in member.binary_gens[0][crossing_point:]]
-
-    return [crossed_genes, crossed_genes]
+    return [
+        get_genes_crossed_one_point(member, next_member, crossing_point, 0),
+        get_genes_crossed_one_point(member, next_member, crossing_point, 1),
+    ]
 
 
 class OnePointCrossing(CrossingStrategy):
     def cross(self, members, probability):
-        return [cross_item(member, probability) for member in members]
+        return [cross_item_one_point(
+            members[chromosome_index],
+            members[chromosome_index + 1]
+        ) for chromosome_index in range(0, len(members), 2)] + \
+               [cross_item_one_point(
+                   members[chromosome_index + 1],
+                   members[chromosome_index]
+               ) for chromosome_index in range(0, len(members), 2)] + \
+               [member.binary_gens for member in members]

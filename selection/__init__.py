@@ -54,7 +54,6 @@ class RouletteSelection(SelectionStrategy):
 
         return [members[self.get_index_element_by_distributor(random())] for _ in range(to_be_selected_amount)]
 
-
 class TournamentSelection(SelectionStrategy):
     def __init__(self, group_size):
         self._group_size = group_size
