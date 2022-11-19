@@ -99,7 +99,7 @@ class Crossing:
             first_draw = random.randint(0, len(self.list_of_individuals_after_selection) - 1)
             second_draw = random.randint(0, len(self.list_of_individuals_after_selection) - 1)
 
-            while (first_draw == second_draw):
+            while first_draw == second_draw:
                 second_draw = random.randint(0, len(self.list_of_individuals_after_selection))
 
             crossover_probability = random.uniform(0, 1)

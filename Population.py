@@ -52,7 +52,7 @@ class Population:
 
     def evolve(self, fitness):
 
-        for _ in range(3):
+        for _ in range(100):
             # strategy
             elite_members_amount, saved_elite_chromosomes, operational_chromosomes = self.__elite_strategy(0.2)
 
