@@ -58,7 +58,6 @@ class RouletteSelection(SelectionStrategy):
             self.members_roulette_probability_distributor.append(member_probability_distributor)
 
         # TODO draw members draw and same time rand probability for crossing - alived or not
-
         return [members[self.get_index_element_by_distributor(random())] for _ in range(to_be_selected_amount)]
 
 

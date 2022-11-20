@@ -27,47 +27,87 @@ class CalculationList(APIView):
 
         evolutionary_computing_calculation = Calculation(
             int(request.data['epoch_amount']),
+            int(request.data['best_members_selection_percentage']),
             int(request.data['population_members_count']),
             int(request.data['search_result_range_from']),
             int(request.data['search_result_range_to']),
             int(request.data['elite_percentage']),
-            int(request.data['best_members_selection_percentage']),
             int(request.data['tournament_selection_groups_size']),
+            int(request.data['cross_probability']),
+            int(request.data['mutation_probability']),
+            int(request.data['inversion_probability']),
             request.data['selection_method'],
             request.data['problem_to_solve'],
-            'one_point',
+            request.data['crossing_kind'],
+            request.data['mutation_method'],
             'goldstein_price'
         )
 
         calculation_result = evolutionary_computing_calculation.trigger()
         execution_time = time.time() - start_time
 
+        def makeChart(calculation_result):
+            calculation_result
+            epoch = []
+            value = []
+            for i in calculation_result:
+                epoch.append(i[0])
+                value.append(i[3])
+
+            plt.figure(figsize=(7, 4), dpi=200)
+            plt.title("Wartosc funkcji od kolejnej iteracji")
+            plt.xlabel('Ilosc epok')
+            plt.ylabel('Wartosc funkcji')
+            plt.plot(epoch, value, label='f(x,y)', color='red', linewidth=2)
+            plt.legend()
+            plt.savefig('wartosc_funkcji', dpi=250)
+            plt.show()
+            return epoch, value
+
+        def normal_pdf(x, mu, sigma):
+            return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp((-1 / 2) * ((x - mu) / sigma) ** 2)
+
+            plt.figure(figsize=(7, 4), dpi=200)
+            plt.title("Srednia wartosc funkcji oraz odchylenie standardowe")
+            plt.ylabel('Ilosc epok')
+            plt.xlabel('Wartosc funkcji')
+
+            plt.hist(values, bins=50, color='c', edgecolor='k')
+            m = statistics.mean(values)
+            sd = statistics.stdev(values)
+
+            plt.axvline(m, color='k', linestyle='dashed')
+            plt.axvline(m + sd, color='y', linestyle='dashed')
+            plt.axvline(m - sd, color='y', linestyle='dashed')
+            plt.savefig('srednia_wartosc_odchylenie_standardowe', dpi=250)
+            plt.show()
+
+
         result_record = {
             'execution_time': execution_time,
             'x1': calculation_result[-1][1],
             'x2': calculation_result[-1][2],
-            'fit_fun': calculation_result[-1][3]
+            'fit_fun': calculation_result[-1][3],
+            'problem_to_solve': request.data['problem_to_solve'],
+            'variation': calculation_result[-1][4],
         }
 
         serialized_result_record = CalculationSerieSerializer(data=result_record)
-        saved_result_record_id = 0
 
         if serialized_result_record.is_valid():
             saved_result_record = serialized_result_record.save()
             saved_result_record_id = saved_result_record.id
         else:
             return Response({
-                'executionTime': execution_time,
-                'x1': calculation_result[-1][1],
-                'x2': calculation_result[-1][2],
-                'fitFunVal': calculation_result[-1][3]
-            }, status=status.HTTP_200_OK)
+                'reason': 'sth went wrong!'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serialized_data = [CalculationResultsSerializer(data={
             'saved_result_record_id': saved_result_record_id,
             'x1': result_item[1],
             'x2': result_item[2],
-            'fit_fun': result_item[3]
+            'fit_fun': result_item[3],
+            'variation': calculation_result[-1][4],
         }) for result_item in calculation_result]
 
         for serialized_data_item in serialized_data:

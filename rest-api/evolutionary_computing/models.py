@@ -8,6 +8,7 @@ class CalculatorResults(models.Model):
     x1 = models.CharField("x1", max_length=240)
     x2 = models.CharField("x2", max_length=240)
     fit_fun = models.CharField("fit_fun", max_length=240)
+    variation = models.CharField("fit_fun", max_length=240)
 
     def __str__(self):
         return self.fit_fun
@@ -19,6 +20,8 @@ class Calculator(models.Model):
     x1 = models.CharField("x1", max_length=240)
     x2 = models.CharField("x2", max_length=240)
     fit_fun = models.CharField("fit_fun", max_length=240)
+    problem_to_solve = models.CharField("fit_fun", max_length=240)
+    variation = models.CharField("fit_fun", max_length=240)
 
     def __str__(self):
         return self.fit_fun

@@ -1,6 +1,8 @@
 import math
 from typing import List
 
+import numpy as np
+
 from evolutionary_computing.calculation.Chromosome import Chromosome
 from evolutionary_computing.calculation.functions.goldstein_price import goldstein_price
 from evolutionary_computing.calculation.selection import SelectionStrategy
@@ -50,19 +52,26 @@ class Population:
 
         return amount, saved, operational
 
-    def get_best_value(self, epoch_index, problem_to_solve):
+    def calc_variation(self, epoch_res_chromosomes):
+        pass
+
+    def get_formatted_result(self, epoch_index, problem_to_solve):
         sorted_population = sort_population(self._chromosomes)
+
+        variation = np.var([chromosome.value for chromosome in self._chromosomes])
 
         if problem_to_solve == 'maximization':
             return epoch_index + 1, \
                    sorted_population[-1].dec_gens[0], \
                    sorted_population[-1].dec_gens[1], \
-                   sorted_population[-1].value
+                   sorted_population[-1].value, \
+                   variation
         else:
             return epoch_index + 1, \
                    sorted_population[0].dec_gens[0], \
                    sorted_population[0].dec_gens[1], \
-                   sorted_population[0].value
+                   sorted_population[0].value, \
+                   variation
 
     def evolve(
         self,
@@ -71,6 +80,9 @@ class Population:
         epoch_amount,
         elite_percentage,
         problem_to_solve,
+        probability_of_mutation,
+        probability_of_crossing,
+        probability_of_inversion,
         search_result_range_from,
         search_result_range_to
     ):
@@ -81,6 +93,7 @@ class Population:
             4. mutation
             5. inversion
             6. reassign population with calculated members
+            7. result aggregation
         """
         for epoch_index in range(epoch_amount):
             # 1. strategy
@@ -97,27 +110,17 @@ class Population:
             )
 
             # 3. crossing
-            member_after_crossing = crossing.cross(selected, 0.5, problem_to_solve)
+            member_after_crossing = crossing.cross(selected, probability_of_crossing, problem_to_solve)
 
             # 4. mutation
-            mutated = Mutation(member_after_crossing, 0.8)
-
-            # mutated.homogeneous_mutation()
-            # mutated.edge_mutation()
-
+            mutated = Mutation(member_after_crossing, probability_of_mutation)
             mutated.two_point_mutation()
 
-            # print(mutated.member_after_mutation)
-
-            # inversion
-            # TODO probability from param
-            population_inversion = Inversion(0.8)
+            # 5. inversion
+            population_inversion = Inversion(probability_of_inversion)
             inverted_population = population_inversion.inversion_in_population(mutated.member_after_mutation)
 
-            # print(population_inversion.inverted_population)
-
-            # assign to _chromosomes
-            # population_inversion.inverted_population
+            # 6. assign to _chromosomes
             self._chromosomes = []
             self._chromosomes = \
                 [Chromosome(
@@ -129,9 +132,7 @@ class Population:
                 ) for initial_binary_gens in inverted_population] \
                 + saved_elite_chromosomes
 
-            # X1, X2, FitFun(x1, x2), srednie odchylenie standardowe dla całej populacji
-            # -> baza danych
-
-            self._calculation_results.append(self.get_best_value(epoch_index, problem_to_solve))
+            # 7. result aggregation
+            self._calculation_results.append(self.get_formatted_result(epoch_index, problem_to_solve))
 
         return self._calculation_results

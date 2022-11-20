@@ -42,19 +42,19 @@ const App = () => {
     setLoading(true);
 
     axios.post('http://127.0.0.1:8000/evolutionary-computing/compute/', {
-      best_members_selection_percentage: bestMembersSelectionPercentage,
       epoch_amount: epochsCount,
+      best_members_selection_percentage: bestMembersSelectionPercentage,
       population_members_count: populationMembersCount,
       search_result_range_from: beginOfrRange,
       search_result_range_to: endOfRange,
       elite_percentage: eliteStrategyPercentage,
+      tournament_selection_groups_size: tournamentSelectionCount,
       cross_probability: crossProbablility,
       mutation_probability: mutationProbability,
       inversion_probability: inversionProbability,
       selection_method: selectionMethod,
       crossing_kind: crossMethod,
       mutation_method: mutationMethod,
-      tournament_selection_groups_size: tournamentSelectionCount,
       problem_to_solve: problemToBeSolved
     }).then(res => setResponse(res.data))
       .catch(e => {

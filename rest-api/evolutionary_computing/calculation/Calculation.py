@@ -18,6 +18,7 @@ class Calculation:
         elite_percentage,
         best_members_selection_percentage,
         tournament_selection_groups_size,
+        probability_of_mutation,
         selection=RouletteSelection(),
         crossing=OnePointCrossing(),
         fitness=goldstein_price
@@ -39,10 +40,22 @@ class Calculation:
         self.search_result_range_to = search_result_range_to
         self.elite_percentage = elite_percentage
         self.best_percentage_selection_members = best_members_selection_percentage
+        self.probability_of_mutation = probability_of_mutation
         self.tournament_selection_groups_size = tournament_selection_groups_size
         self.crossing = crossing
         self.fitness = fitness
 
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
-        self.population.evolve(self.fitness, self.crossing, self.epoch_amount, self.elite_percentage)
+        self.population.evolve(
+            self.fitness,
+            self.crossing,
+            self.epoch_amount,
+            self.elite_percentage,
+            self.problem_to_solve,
+            self.probability_of_mutation,
+            self.probability_of_crossing,
+            self.probability_of_inversion,
+            self.search_result_range_from,
+            self.search_result_range_to,
+        )
