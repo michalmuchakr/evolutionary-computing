@@ -2,7 +2,10 @@ import time
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
+from matplotlib import pyplot as plt
+import statistics
 
+from .calculation.utils.generate_charts import make_chart, save_charts
 from .models import CalculatorResults
 from .serializers import CalculationResultsSerializer, CalculationSerieSerializer
 from .calculation import Calculation
@@ -17,14 +20,41 @@ class CalculationTrigger(generics.CreateAPIView):
 class CalculationList(APIView):
     http_method_names = ['get', 'post', 'head']
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         users = CalculatorResults.objects.all()
         calc_serializer = CalculationResultsSerializer(users, many=True)
         return Response(calc_serializer.data)
 
     def post(self, request):
+        # start timer
         start_time = time.time()
 
+        calculation_result = self._calculate_evolutionary_computing(request)
+
+        # calc execution_time
+        execution_time = time.time() - start_time
+
+        best_fit_fun_value_in_each_epochs = make_chart(calculation_result)
+        save_charts(best_fit_fun_value_in_each_epochs)
+
+        saved_result_record_id = self._save_calculation_best_result(
+            execution_time,
+            calculation_result,
+            request.data['problem_to_solve']
+        )
+
+        self._save_calculation_epochs(saved_result_record_id, calculation_result)
+
+        return Response({
+            'executionTime': execution_time,
+            'x1': calculation_result[-1][1],
+            'x2': calculation_result[-1][2],
+            'fitFunVal': calculation_result[-1][3]
+        }, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def _calculate_evolutionary_computing(request):
         evolutionary_computing_calculation = Calculation(
             int(request.data['epoch_amount']),
             int(request.data['best_members_selection_percentage']),
@@ -43,52 +73,16 @@ class CalculationList(APIView):
             'goldstein_price'
         )
 
-        calculation_result = evolutionary_computing_calculation.trigger()
-        execution_time = time.time() - start_time
+        return evolutionary_computing_calculation.trigger()
 
-        def makeChart(calculation_result):
-            calculation_result
-            epoch = []
-            value = []
-            for i in calculation_result:
-                epoch.append(i[0])
-                value.append(i[3])
-
-            plt.figure(figsize=(7, 4), dpi=200)
-            plt.title("Wartosc funkcji od kolejnej iteracji")
-            plt.xlabel('Ilosc epok')
-            plt.ylabel('Wartosc funkcji')
-            plt.plot(epoch, value, label='f(x,y)', color='red', linewidth=2)
-            plt.legend()
-            plt.savefig('wartosc_funkcji', dpi=250)
-            plt.show()
-            return epoch, value
-
-        def normal_pdf(x, mu, sigma):
-            return (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp((-1 / 2) * ((x - mu) / sigma) ** 2)
-
-            plt.figure(figsize=(7, 4), dpi=200)
-            plt.title("Srednia wartosc funkcji oraz odchylenie standardowe")
-            plt.ylabel('Ilosc epok')
-            plt.xlabel('Wartosc funkcji')
-
-            plt.hist(values, bins=50, color='c', edgecolor='k')
-            m = statistics.mean(values)
-            sd = statistics.stdev(values)
-
-            plt.axvline(m, color='k', linestyle='dashed')
-            plt.axvline(m + sd, color='y', linestyle='dashed')
-            plt.axvline(m - sd, color='y', linestyle='dashed')
-            plt.savefig('srednia_wartosc_odchylenie_standardowe', dpi=250)
-            plt.show()
-
-
+    @staticmethod
+    def _save_calculation_best_result(execution_time, calculation_result, problem_to_solve):
         result_record = {
             'execution_time': execution_time,
             'x1': calculation_result[-1][1],
             'x2': calculation_result[-1][2],
             'fit_fun': calculation_result[-1][3],
-            'problem_to_solve': request.data['problem_to_solve'],
+            'problem_to_solve': problem_to_solve,
             'variation': calculation_result[-1][4],
         }
 
@@ -102,6 +96,10 @@ class CalculationList(APIView):
                 'reason': 'sth went wrong!'
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        return saved_result_record_id
+
+    @staticmethod
+    def _save_calculation_epochs(saved_result_record_id, calculation_result):
         serialized_data = [CalculationResultsSerializer(data={
             'saved_result_record_id': saved_result_record_id,
             'x1': result_item[1],
@@ -117,10 +115,3 @@ class CalculationList(APIView):
                 return Response({
                     'reason': 'sth went wrong!'
                 }, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({
-            'executionTime': execution_time,
-            'x1': calculation_result[-1][1],
-            'x2': calculation_result[-1][2],
-            'fitFunVal': calculation_result[-1][3]
-        }, status=status.HTTP_200_OK)

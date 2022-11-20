@@ -1,7 +1,7 @@
 import math
 import random
 
-from .utils.binary_to_decimal import binary_to_decimal
+from evolutionary_computing.calculation.utils.binary_to_decimal import binary_to_decimal
 
 
 class Chromosome:

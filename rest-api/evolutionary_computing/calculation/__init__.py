@@ -1,8 +1,8 @@
-from .Mutation import Mutation
-from .Population import Population
 from .crorrsing import OnePointCrossing
 from .functions.goldstein_price import goldstein_price
-from .selection import RouletteSelection
+from .mutation import HomogeneousMutation, EdgeMutation, TwoPointMutation
+from .population import Population
+from .selection import RouletteSelection, TournamentSelection
 
 
 class Calculation:
@@ -13,6 +13,7 @@ class Calculation:
     selection_dictionary = {
         "roulette": RouletteSelection(),
         "best": RouletteSelection(),
+        "tournament": TournamentSelection(),
     }
 
     crossing_dictionary = {
@@ -23,7 +24,9 @@ class Calculation:
     }
 
     mutation_dictionary = {
-        "one_point": Mutation,
+        "homogeneous_mutation": HomogeneousMutation(),
+        "edge_mutation": EdgeMutation(),
+        "two_point_mutation": TwoPointMutation(),
     }
 
     fit_function_dictionary = {
@@ -73,7 +76,7 @@ class Calculation:
         self.probability_of_mutation = mutation_probability
         self.probability_of_crossing = cross_probability
         self.probability_of_inversion = inversion_probability
-        self.mutation = mutation_method
+        self.mutation = self.mutation_dictionary[mutation_method]
 
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
@@ -87,5 +90,6 @@ class Calculation:
             self.probability_of_crossing,
             self.probability_of_inversion,
             self.search_result_range_from,
-            self.search_result_range_to
+            self.search_result_range_to,
+            self.mutation
         )

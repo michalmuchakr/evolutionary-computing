@@ -57,16 +57,13 @@ class RouletteSelection(SelectionStrategy):
 
             self.members_roulette_probability_distributor.append(member_probability_distributor)
 
-        # TODO draw members draw and same time rand probability for crossing - alived or not
         return [members[self.get_index_element_by_distributor(random())] for _ in range(to_be_selected_amount)]
 
 
 class TournamentSelection(SelectionStrategy):
-    def __init__(self, group_size):
-        self._group_size = group_size
 
     def select(self, members, to_be_selected_amount, problem_to_solve):
-        chunked_population_for_tournament = split_list_into_chunks(members, self._group_size)
+        chunked_population_for_tournament = split_list_into_chunks(members, to_be_selected_amount)
 
         # sort chunks by fit function
         for index, tournament_chunk in enumerate(chunked_population_for_tournament):
@@ -82,14 +79,9 @@ class TournamentSelection(SelectionStrategy):
 
 
 class BestFitSelection(SelectionStrategy):
-    def __init__(self, percentage_selection, population_size):
-        self._percentage_selection = percentage_selection
-        self._population_size = population_size
-
     def select(self, members, to_be_selected_amount, problem_to_solve):
         population_to_select_from_members = members
         sorted_population = sort_population(population_to_select_from_members)
-        last_best_member_index = math.floor(self._population_size * self._percentage_selection / 100)
 
         # get the best members from stack
-        return sorted_population[0:last_best_member_index]
+        return sorted_population[0:to_be_selected_amount]

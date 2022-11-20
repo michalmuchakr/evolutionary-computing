@@ -3,12 +3,11 @@ from typing import List
 
 import numpy as np
 
-from evolutionary_computing.calculation.Chromosome import Chromosome
+from evolutionary_computing.calculation.chromosome import Chromosome
 from evolutionary_computing.calculation.functions.goldstein_price import goldstein_price
 from evolutionary_computing.calculation.selection import SelectionStrategy
 from evolutionary_computing.calculation.utils.decimal_to_percentage import decimal_to_percentage
 from evolutionary_computing.calculation.utils.sort_population import sort_population
-from evolutionary_computing.calculation.Mutation import Mutation
 from evolutionary_computing.calculation.inversion import Inversion
 
 
@@ -47,8 +46,8 @@ class Population:
             operational = sorted_members[:-amount]
             saved = sorted_members[-amount:len(sorted_members)]
         else:
-            operational = sorted_members[:amount]
-            saved = sorted_members[len(sorted_members) - amount:]
+            operational = sorted_members[amount:]
+            saved = sorted_members[:amount]
 
         return amount, saved, operational
 
@@ -84,7 +83,8 @@ class Population:
         probability_of_crossing,
         probability_of_inversion,
         search_result_range_from,
-        search_result_range_to
+        search_result_range_to,
+        mutation
     ):
         """
             1. strategy
@@ -95,6 +95,8 @@ class Population:
             6. reassign population with calculated members
             7. result aggregation
         """
+        self._calculation_results = []
+
         for epoch_index in range(epoch_amount):
             # 1. strategy
             elite_members_amount, saved_elite_chromosomes, operational_chromosomes = \
@@ -113,12 +115,11 @@ class Population:
             member_after_crossing = crossing.cross(selected, probability_of_crossing, problem_to_solve)
 
             # 4. mutation
-            mutated = Mutation(member_after_crossing, probability_of_mutation)
-            mutated.two_point_mutation()
+            member_after_mutation = mutation.mutate(member_after_crossing, probability_of_mutation)
 
             # 5. inversion
             population_inversion = Inversion(probability_of_inversion)
-            inverted_population = population_inversion.inversion_in_population(mutated.member_after_mutation)
+            inverted_population = population_inversion.inversion_in_population(member_after_mutation)
 
             # 6. assign to _chromosomes
             self._chromosomes = []

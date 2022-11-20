@@ -69,18 +69,18 @@ const InitialCalculationDataForm = ({
         inputValue={eliteStrategyPercentage}
         onChangeCallBack={setEliteStrategyPercentage}
       />
-      <InputElement
-        elementName="bestMembersSelectionPercentage"
-        labelTxt="Best members percentage"
-        inputValue={bestMembersSelectionPercentage}
-        onChangeCallBack={setBestMembersSelectionPercentage}
-      />
-      <InputElement
-        elementName="chromosomCount"
-        labelTxt="Tournament selection amount"
-        inputValue={tournamentSelectionCount}
-        onChangeCallBack={setTournamentSelectionCount}
-      />
+      {/*<InputElement*/}
+      {/*  elementName="bestMembersSelectionPercentage"*/}
+      {/*  labelTxt="Best members percentage"*/}
+      {/*  inputValue={bestMembersSelectionPercentage}*/}
+      {/*  onChangeCallBack={setBestMembersSelectionPercentage}*/}
+      {/*/>*/}
+      {/*<InputElement*/}
+      {/*  elementName="chromosomCount"*/}
+      {/*  labelTxt="Tournament selection amount"*/}
+      {/*  inputValue={tournamentSelectionCount}*/}
+      {/*  onChangeCallBack={setTournamentSelectionCount}*/}
+      {/*/>*/}
       <InputElement
         elementName="crossProbablility"
         labelTxt="Cross probablility"
@@ -99,11 +99,11 @@ const InitialCalculationDataForm = ({
         inputValue={inversionProbability}
         onChangeCallBack={setInversionProbability}
       />
-      <SelectElement label="Selection method" options={['best', 'roulette']} onChangeCallBack={setProblemToBeSolved}
+      <SelectElement label="Selection method" options={['best', 'roulette', 'tournament']} onChangeCallBack={setSelectionMethod}
                      selectValue={selectionMethod}/>
       <SelectElement label="Cross method" options={['one_point', 'two_points', 'three_point', 'homo']}
                      onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
-      <SelectElement label="Mutation method" options={['one_point', 'two_point']} onChangeCallBack={setMutationMethod}
+      <SelectElement label="Mutation method" options={['homogeneous_mutation', 'edge_mutation', 'two_point_mutation']} onChangeCallBack={setMutationMethod}
                      selectValue={mutationMethod}/>
       <Row>
         <Col

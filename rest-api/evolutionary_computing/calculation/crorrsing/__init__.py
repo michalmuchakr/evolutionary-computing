@@ -178,3 +178,17 @@ class OnePointCrossing(CrossingStrategy):
                 members[chromosome_index]
             ) for chromosome_index in range(0, len(members), 2)] + \
             [member.binary_gens for member in members]
+
+
+class OneTwoPointsCrossing(CrossingStrategy):
+    def cross(self, members, probability, problem_to_solve):
+        return \
+            [cross_item_one_point(
+                members[chromosome_index],
+                members[chromosome_index + 1]
+            ) for chromosome_index in range(0, len(members), 2)] + \
+            [cross_item_one_point(
+                members[chromosome_index + 1],
+                members[chromosome_index]
+            ) for chromosome_index in range(0, len(members), 2)] + \
+            [member.binary_gens for member in members]
