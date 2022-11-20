@@ -23,8 +23,8 @@ const App = () => {
 
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [backendError, setBackendError] = useState(false);
 
+  const [backendError, setBackendError] = useState(null);
   const [response, setResponse] = useState<{
     x1: string,
     x2: string,
@@ -38,7 +38,7 @@ const App = () => {
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-
+    setBackendError(null)
     setLoading(true);
 
     axios.post('http://127.0.0.1:8000/evolutionary-computing/compute/', {
@@ -57,7 +57,9 @@ const App = () => {
       tournament_selection_groups_size: tournamentSelectionCount,
       problem_to_solve: problemToBeSolved
     }).then(res => setResponse(res.data))
-      .catch(e => setBackendError(e))
+      .catch(e => {
+        setBackendError(e.code)
+      })
       .finally(() => {
         setLoading(false);
       });

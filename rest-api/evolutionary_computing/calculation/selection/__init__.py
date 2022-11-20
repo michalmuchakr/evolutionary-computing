@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import math
 from random import random
 
-
 from evolutionary_computing.calculation.utils.split_into_chunks import split_list_into_chunks
 from evolutionary_computing.calculation.utils.sort_population import sort_population
 
@@ -35,7 +34,6 @@ class RouletteSelection(SelectionStrategy):
                 all_members_fit_fun_sum += 1 / member.value
             else:
                 all_members_fit_fun_sum += member.value
-
 
         # Calc probability and distributor for each population member
         # members_roulette_probability_distributor = [[probability, distributor]]
