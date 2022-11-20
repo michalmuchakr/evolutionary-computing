@@ -9,7 +9,7 @@ from evolutionary_computing.calculation.utils.sort_population import sort_popula
 
 class SelectionStrategy(ABC):
     @abstractmethod
-    def select(self, members, to_be_selected_amount):
+    def select(self, members, to_be_selected_amount, problem_to_solve):
         pass
 
 
@@ -24,14 +24,18 @@ class RouletteSelection(SelectionStrategy):
             if probability_distributor[1] > draw_distributor:
                 return draw_result_item_index
 
-    def select(self, members, to_be_selected_amount):
+    def select(self, members, to_be_selected_amount, problem_to_solve):
         self.members_roulette_probability_distributor = []
         population_to_select_from_members = members
 
         # calc fin fun sum for all members
         all_members_fit_fun_sum = 0
         for member in population_to_select_from_members:
-            all_members_fit_fun_sum += 1 / member.value
+            if problem_to_solve == 'minimization':
+                all_members_fit_fun_sum += 1 / member.value
+            else:
+                all_members_fit_fun_sum += member.value
+
 
         # Calc probability and distributor for each population member
         # members_roulette_probability_distributor = [[probability, distributor]]
@@ -39,7 +43,11 @@ class RouletteSelection(SelectionStrategy):
             member_probability_distributor = []
 
             # probability
-            member_probability = (1 / member.value) / all_members_fit_fun_sum
+            if problem_to_solve == 'minimization':
+                member_probability = (1 / member.value) / all_members_fit_fun_sum
+            else:
+                member_probability = member.value / all_members_fit_fun_sum
+
             member_probability_distributor.append(member_probability)
 
             # distributor
@@ -51,15 +59,16 @@ class RouletteSelection(SelectionStrategy):
 
             self.members_roulette_probability_distributor.append(member_probability_distributor)
 
-        # TODO draw members draw and same time rand probability for crossing - alved or not
+        # TODO draw members draw and same time rand probability for crossing - alived or not
 
         return [members[self.get_index_element_by_distributor(random())] for _ in range(to_be_selected_amount)]
+
 
 class TournamentSelection(SelectionStrategy):
     def __init__(self, group_size):
         self._group_size = group_size
 
-    def select(self, members, to_be_selected_amount):
+    def select(self, members, to_be_selected_amount, problem_to_solve):
         chunked_population_for_tournament = split_list_into_chunks(members, self._group_size)
 
         # sort chunks by fit function
@@ -80,7 +89,7 @@ class BestFitSelection(SelectionStrategy):
         self._percentage_selection = percentage_selection
         self._population_size = population_size
 
-    def select(self, members, to_be_selected_amount):
+    def select(self, members, to_be_selected_amount, problem_to_solve):
         population_to_select_from_members = members
         sorted_population = sort_population(population_to_select_from_members)
         last_best_member_index = math.floor(self._population_size * self._percentage_selection / 100)

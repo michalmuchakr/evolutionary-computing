@@ -26,20 +26,15 @@ class CalculationList(APIView):
         start_time = time.time()
 
         evolutionary_computing_calculation = Calculation(
-            # int(request.data['epoch_amount']),
-            # int(request.data['population_members_count']),
-            # int(request.data['begin_of_range']),
-            # int(request.data['end_of_range']),
-            # int(request.data['end_of_range']),
-            # int(request.data['elite_strategy_percentage']),
-            1000,
-            100,
-            -2,
-            2,
-            20,
-            3,
-            2,
-            'roulette_selection',
+            int(request.data['epoch_amount']),
+            int(request.data['population_members_count']),
+            int(request.data['search_result_range_from']),
+            int(request.data['search_result_range_to']),
+            int(request.data['elite_percentage']),
+            int(request.data['best_members_selection_percentage']),
+            int(request.data['tournament_selection_groups_size']),
+            request.data['selection_method'],
+            request.data['problem_to_solve'],
             'one_point',
             'goldstein_price'
         )

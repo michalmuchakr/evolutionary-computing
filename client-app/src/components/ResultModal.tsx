@@ -1,24 +1,41 @@
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import {Modal, ModalHeader, ModalBody, CardText, Alert} from 'reactstrap';
 
 const ResultModal = ({
-  isModalOpened,
-  hideModal,
-  response
-}: {
+                       isLoading,
+                       isModalOpened,
+                       hideModal,
+                       response,
+                       backendError,
+                     }: {
+  isLoading: boolean;
   isModalOpened: boolean;
   hideModal: () => void;
   response: {
+    executionTime: string;
     x1: string,
     x2: string,
-    fitFunVal: string
+    fitFunVal: string,
   } | null;
+  backendError: any;
 }) => {
   return (
-    <Modal isOpen={isModalOpened}>
+    <Modal isOpen={isModalOpened && !isLoading} size="lg" backdrop={true} toggle={hideModal}>
       <ModalHeader toggle={hideModal}>Result modal</ModalHeader>
       <ModalBody>
-        {response && (
-          `f(${response.x1}, ${response.x2}) = ${response.fitFunVal}`
+        {response && !backendError && (
+          <>
+            <CardText>
+              {`f( ${response.x1}, ${response.x2} ) = ${response.fitFunVal}`}
+            </CardText>
+            <CardText>
+              {`execution time: ${response.executionTime} s`}
+            </CardText>
+          </>
+        )}
+        {backendError && (
+          <Alert color="danger">
+            {backendError}
+          </Alert>
         )}
       </ModalBody>
     </Modal>

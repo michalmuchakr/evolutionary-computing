@@ -1,31 +1,35 @@
-import { FormEvent, useState } from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import {FormEvent, useState} from 'react';
+import {Col, Container, Row} from 'reactstrap';
 import InitialCalculationDataForm from './components/InitialCalculationDataForm';
 import ResultModal from './components/ResultModal';
-import { calculationFormSubmit } from './utils/common';
 import axios from "axios";
 
 const App = () => {
-  const [beginOfrRange, setBeginOfRange] = useState('');
-  const [endOfRange, setEndOfRange] = useState('');
-  const [populationMembersCount, setPopulationMembersCount] = useState('');
-  const [epochsCount, setEpochsCount] = useState('');
-  const [chromosomCount, setChromosomCount] = useState('');
-  const [eliteStrategyCount, setEliteStrategyCount] = useState('');
-  const [bitsCount, setBitsCount] = useState('');
-  const [crossProbablility, setCrossProbablility] = useState('');
-  const [mutationProbability, setMutationProbability] = useState('');
-  const [inversionProbability, setInversionProbability] = useState('');
+  const [problemToBeSolved, setProblemToBeSolved] = useState('maximization');
+  const [beginOfrRange, setBeginOfRange] = useState('-2');
+  const [endOfRange, setEndOfRange] = useState('2');
+  const [populationMembersCount, setPopulationMembersCount] = useState('200');
+  const [epochsCount, setEpochsCount] = useState('1000');
+  const [tournamentSelectionCount, setTournamentSelectionCount] = useState('2');
+  const [eliteStrategyPercentage, setEliteStrategyPercentage] = useState('10');
+  const [bestMembersSelectionPercentage, setBestMembersSelectionPercentage] = useState('10');
+  // const [bitsCount, setBitsCount] = useState('');
+  const [crossProbablility, setCrossProbablility] = useState('10');
+  const [mutationProbability, setMutationProbability] = useState('80');
+  const [inversionProbability, setInversionProbability] = useState('80');
   const [selectionMethod, setSelectionMethod] = useState('best');
   const [crossMethod, setCrossMethod] = useState('one_point');
   const [mutationMethod, setMutationMethod] = useState('one_point');
 
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [backendError, setBackendError] = useState(false);
 
   const [response, setResponse] = useState<{
     x1: string,
     x2: string,
     fitFunVal: string
+    executionTime: string;
   } | null>(null);
 
   const hideModal = () => {
@@ -35,22 +39,30 @@ const App = () => {
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    axios.post('http://127.0.0.1:8000/eo/', {
-      begin_of_range: beginOfrRange,
-      end_of_range: endOfRange,
+    setLoading(true);
+
+    axios.post('http://127.0.0.1:8000/evolutionary-computing/compute/', {
+      best_members_selection_percentage: bestMembersSelectionPercentage,
+      epoch_amount: epochsCount,
       population_members_count: populationMembersCount,
-      chromosom_count: chromosomCount,
-      elite_strategy_count: eliteStrategyCount,
-      bits_count: bitsCount,
-      cross_probablility: crossProbablility,
+      search_result_range_from: beginOfrRange,
+      search_result_range_to: endOfRange,
+      elite_percentage: eliteStrategyPercentage,
+      cross_probability: crossProbablility,
       mutation_probability: mutationProbability,
       inversion_probability: inversionProbability,
       selection_method: selectionMethod,
-      cross_method: crossMethod,
+      crossing_kind: crossMethod,
       mutation_method: mutationMethod,
-    }).then(res => setResponse(res.data));
+      tournament_selection_groups_size: tournamentSelectionCount,
+      problem_to_solve: problemToBeSolved
+    }).then(res => setResponse(res.data))
+      .catch(e => setBackendError(e))
+      .finally(() => {
+        setLoading(false);
+      });
 
-    calculationFormSubmit(setIsModalOpened);
+    setIsModalOpened(true);
   };
 
   return (
@@ -64,6 +76,10 @@ const App = () => {
         >
           <InitialCalculationDataForm
             onFormSubmit={onFormSubmit}
+            problemToBeSolved={problemToBeSolved}
+            setProblemToBeSolved={setProblemToBeSolved}
+            bestMembersSelectionPercentage={bestMembersSelectionPercentage}
+            setBestMembersSelectionPercentage={setBestMembersSelectionPercentage}
             beginOfrRange={beginOfrRange}
             setBeginOfRange={setBeginOfRange}
             endOfRange={endOfRange}
@@ -72,14 +88,13 @@ const App = () => {
             setPopulationMembersCount={setPopulationMembersCount}
             epochsCount={epochsCount}
             setEpochsCount={setEpochsCount}
-            chromosomCount={chromosomCount}
-            setChromosomCount={setChromosomCount}
-            eliteStrategyCount={eliteStrategyCount}
-            bitsCount={bitsCount}
+            tournamentSelectionCount={tournamentSelectionCount}
+            eliteStrategyPercentage={eliteStrategyPercentage}
+            // bitsCount={bitsCount}
             crossProbablility={crossProbablility}
             mutationProbability={mutationProbability}
             inversionProbability={inversionProbability}
-            setEliteStrategyCount={setEliteStrategyCount}
+            setEliteStrategyPercentage={setEliteStrategyPercentage}
             setInversionProbability={setInversionProbability}
             setMutationProbability={setMutationProbability}
             selectionMethod={selectionMethod}
@@ -88,10 +103,12 @@ const App = () => {
             setCrossMethod={setCrossMethod}
             mutationMethod={mutationMethod}
             setMutationMethod={setMutationMethod}
-            setBitsCount={setBitsCount}
+            // setBitsCount={setBitsCount}
             setCrossProbablility={setCrossProbablility}
-          />
-          <ResultModal isModalOpened={isModalOpened} hideModal={hideModal} response={response}/>
+            isLoading={isLoading}
+            setTournamentSelectionCount={setTournamentSelectionCount}/>
+          <ResultModal hideModal={hideModal}
+                       isLoading={isLoading} isModalOpened={isModalOpened} response={response} backendError={backendError}/>
         </Col>
       </Row>
     </Container>

@@ -1,6 +1,10 @@
 import { FormEvent, Dispatch, SetStateAction } from 'react';
 
 export type initialCalculationDataFormType = {
+  problemToBeSolved: string;
+  setProblemToBeSolved: Dispatch<SetStateAction<string>>;
+  bestMembersSelectionPercentage: string;
+  setBestMembersSelectionPercentage: Dispatch<SetStateAction<string>>;
   onFormSubmit: (e: FormEvent) => void;
   beginOfrRange: string;
   setBeginOfRange: Dispatch<SetStateAction<string>>;
@@ -10,22 +14,23 @@ export type initialCalculationDataFormType = {
   setPopulationMembersCount: Dispatch<SetStateAction<string>>;
   epochsCount: string;
   setEpochsCount: Dispatch<SetStateAction<string>>;
-  chromosomCount: string;
-  setChromosomCount: Dispatch<SetStateAction<string>>;
-  eliteStrategyCount: string;
-  setEliteStrategyCount: Dispatch<SetStateAction<string>>;
+  tournamentSelectionCount: string;
+  setTournamentSelectionCount: Dispatch<SetStateAction<string>>;
+  eliteStrategyPercentage: string;
+  setEliteStrategyPercentage: Dispatch<SetStateAction<string>>;
   inversionProbability: string;
   setInversionProbability: Dispatch<SetStateAction<string>>;
   mutationProbability: string;
   setMutationProbability: Dispatch<SetStateAction<string>>;
   crossProbablility: string;
   setCrossProbablility: Dispatch<SetStateAction<string>>;
-  bitsCount: string;
-  setBitsCount: Dispatch<SetStateAction<string>>;
+  // bitsCount: string;
+  // setBitsCount: Dispatch<SetStateAction<string>>;
   selectionMethod: string;
   setSelectionMethod: Dispatch<SetStateAction<string>>;
   crossMethod: string;
   setCrossMethod: Dispatch<SetStateAction<string>>;
   mutationMethod: string;
   setMutationMethod: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
 };

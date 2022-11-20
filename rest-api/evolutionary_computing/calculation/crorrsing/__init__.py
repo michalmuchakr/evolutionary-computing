@@ -148,7 +148,7 @@ class Crossing:
 
 class CrossingStrategy(ABC):
     @abstractmethod
-    def cross(self, members, probability):
+    def cross(self, members, probability, problem_to_solve):
         pass
 
 
@@ -167,7 +167,7 @@ def cross_item_one_point(member, next_member):
 
 
 class OnePointCrossing(CrossingStrategy):
-    def cross(self, members, probability):
+    def cross(self, members, probability, problem_to_solve):
         return \
             [cross_item_one_point(
                 members[chromosome_index],

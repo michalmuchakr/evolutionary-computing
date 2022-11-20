@@ -4,6 +4,10 @@ import InputElement from './InputElement';
 import SelectElement from "./SelectElement";
 
 const InitialCalculationDataForm = ({
+                                      problemToBeSolved,
+                                      setProblemToBeSolved,
+                                      bestMembersSelectionPercentage,
+                                      setBestMembersSelectionPercentage,
                                       onFormSubmit,
                                       beginOfrRange,
                                       setBeginOfRange,
@@ -13,27 +17,40 @@ const InitialCalculationDataForm = ({
                                       setPopulationMembersCount,
                                       epochsCount,
                                       setEpochsCount,
-                                      chromosomCount,
-                                      eliteStrategyCount,
-                                      setEliteStrategyCount,
-                                      setChromosomCount,
+                                      tournamentSelectionCount,
+                                      setTournamentSelectionCount,
+                                      eliteStrategyPercentage,
+                                      setEliteStrategyPercentage,
                                       inversionProbability,
                                       setInversionProbability,
                                       mutationProbability,
                                       setMutationProbability,
                                       crossProbablility,
                                       setCrossProbablility,
-                                      bitsCount,
-                                      setBitsCount,
                                       selectionMethod,
                                       setSelectionMethod,
                                       crossMethod,
                                       setCrossMethod,
                                       mutationMethod,
-                                      setMutationMethod
+                                      setMutationMethod,
+                                      isLoading
                                     }: initialCalculationDataFormType) => {
   return (
     <Form onSubmit={onFormSubmit}>
+      <SelectElement label="Problem to solve" options={['minimization', 'maximization']}
+                     onChangeCallBack={setProblemToBeSolved} selectValue={problemToBeSolved}/>
+      <InputElement
+        elementName="epochsCount"
+        labelTxt="Epochs amount"
+        inputValue={epochsCount}
+        onChangeCallBack={setEpochsCount}
+      />
+      <InputElement
+        elementName="populationMembersCount"
+        labelTxt="Population members"
+        inputValue={populationMembersCount}
+        onChangeCallBack={setPopulationMembersCount}
+      />
       <InputElement
         elementName="beginOfrRange"
         labelTxt="Begin of range"
@@ -47,34 +64,22 @@ const InitialCalculationDataForm = ({
         onChangeCallBack={setEndOfRange}
       />
       <InputElement
-        elementName="populationMembersCount"
-        labelTxt="Population members"
-        inputValue={populationMembersCount}
-        onChangeCallBack={setPopulationMembersCount}
+        elementName="eliteStrategyPercentage"
+        labelTxt="Elite strategy percentage"
+        inputValue={eliteStrategyPercentage}
+        onChangeCallBack={setEliteStrategyPercentage}
       />
       <InputElement
-        elementName="bitsCount"
-        labelTxt="Bits count"
-        inputValue={bitsCount}
-        onChangeCallBack={setBitsCount}
-      />
-      <InputElement
-        elementName="epochsCount"
-        labelTxt="Epochs amount"
-        inputValue={epochsCount}
-        onChangeCallBack={setEpochsCount}
+        elementName="bestMembersSelectionPercentage"
+        labelTxt="Best members percentage"
+        inputValue={bestMembersSelectionPercentage}
+        onChangeCallBack={setBestMembersSelectionPercentage}
       />
       <InputElement
         elementName="chromosomCount"
-        labelTxt="Best and tournament chromosome amount"
-        inputValue={chromosomCount}
-        onChangeCallBack={setChromosomCount}
-      />
-      <InputElement
-        elementName="eliteStrategyCount"
-        labelTxt="Elite strategy amount"
-        inputValue={eliteStrategyCount}
-        onChangeCallBack={setEliteStrategyCount}
+        labelTxt="Tournament selection amount"
+        inputValue={tournamentSelectionCount}
+        onChangeCallBack={setTournamentSelectionCount}
       />
       <InputElement
         elementName="crossProbablility"
@@ -94,9 +99,12 @@ const InitialCalculationDataForm = ({
         inputValue={inversionProbability}
         onChangeCallBack={setInversionProbability}
       />
-      <SelectElement label="Selection method" options={['best', 'elite', 'roulette']} onChangeCallBack={setSelectionMethod} selectValue={selectionMethod}/>
-      <SelectElement label="Cross method" options={['one_point', 'two_point', 'three_point', 'homo']}  onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
-      <SelectElement label="Mutation method" options={['one_point', 'two_point']}  onChangeCallBack={setMutationMethod} selectValue={mutationMethod}/>
+      <SelectElement label="Selection method" options={['best', 'roulette']} onChangeCallBack={setProblemToBeSolved}
+                     selectValue={selectionMethod}/>
+      <SelectElement label="Cross method" options={['one_point', 'two_points', 'three_point', 'homo']}
+                     onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
+      <SelectElement label="Mutation method" options={['one_point', 'two_point']} onChangeCallBack={setMutationMethod}
+                     selectValue={mutationMethod}/>
       <Row>
         <Col
           className="d-flex justify-content-center"
@@ -106,7 +114,12 @@ const InitialCalculationDataForm = ({
           }}
           sm="12"
         >
-          <Button>Calculate</Button>
+          <Button
+            disabled={isLoading}
+            type="submit"
+          >
+            {isLoading ? 'Loading…' : 'Calculate'}
+          </Button>
         </Col>
       </Row>
     </Form>

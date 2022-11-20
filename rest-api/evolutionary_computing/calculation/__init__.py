@@ -10,11 +10,15 @@ class Calculation:
     """
 
     selection_dictionary = {
-        "roulette_selection": RouletteSelection(),
+        "roulette": RouletteSelection(),
+        "best": RouletteSelection(),
     }
 
     crossing_dictionary = {
-        "one_point": OnePointCrossing()
+        "one_point": OnePointCrossing(),
+        "two_points": OnePointCrossing(),
+        "three_points": OnePointCrossing(),
+        "homo": OnePointCrossing()
     }
 
     fit_function_dictionary = {
@@ -31,6 +35,7 @@ class Calculation:
         best_members_selection_percentage,
         tournament_selection_groups_size,
         selection_kind,
+        problem_to_solve,
         crossing_kind,
         fitness_kind
     ):
@@ -55,7 +60,16 @@ class Calculation:
         self.tournament_selection_groups_size = tournament_selection_groups_size
         self.crossing = self.crossing_dictionary[crossing_kind]
         self.fitness = self.fit_function_dictionary[fitness_kind]
+        self.problem_to_solve = problem_to_solve
 
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
-        return self.population.evolve(self.fitness, self.crossing, self.epoch_amount, self.elite_percentage)
+        return self.population.evolve(
+            self.fitness,
+            self.crossing,
+            self.epoch_amount,
+            self.elite_percentage,
+            self.problem_to_solve,
+            self.search_result_range_from,
+            self.search_result_range_to
+        )
