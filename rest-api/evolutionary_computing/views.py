@@ -2,8 +2,6 @@ import time
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
-from matplotlib import pyplot as plt
-import statistics
 
 from .calculation.utils.generate_charts import make_chart, save_charts
 from .models import CalculatorResults

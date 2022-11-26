@@ -11,15 +11,15 @@ const App = () => {
   const [populationMembersCount, setPopulationMembersCount] = useState('200');
   const [epochsCount, setEpochsCount] = useState('1000');
   const [tournamentSelectionCount, setTournamentSelectionCount] = useState('2');
-  const [eliteStrategyPercentage, setEliteStrategyPercentage] = useState('10');
-  const [bestMembersSelectionPercentage, setBestMembersSelectionPercentage] = useState('10');
+  const [eliteStrategyPercentage, setEliteStrategyPercentage] = useState('20');
+  const [bestMembersSelectionPercentage, setBestMembersSelectionPercentage] = useState('20');
   // const [bitsCount, setBitsCount] = useState('');
-  const [crossProbablility, setCrossProbablility] = useState('10');
+  const [crossProbablility, setCrossProbablility] = useState('20');
   const [mutationProbability, setMutationProbability] = useState('80');
   const [inversionProbability, setInversionProbability] = useState('80');
   const [selectionMethod, setSelectionMethod] = useState('best');
   const [crossMethod, setCrossMethod] = useState('one_point');
-  const [mutationMethod, setMutationMethod] = useState('one_point');
+  const [mutationMethod, setMutationMethod] = useState('homogeneous_mutation');
 
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isLoading, setLoading] = useState(false);

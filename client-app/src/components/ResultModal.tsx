@@ -19,7 +19,7 @@ const ResultModal = ({
   backendError: any;
 }) => {
   return (
-    <Modal isOpen={isModalOpened && !isLoading && !backendError} size="lg" backdrop={true} toggle={hideModal}>
+    <Modal isOpen={isModalOpened && !isLoading} size="lg" backdrop={true} toggle={hideModal}>
       <ModalHeader toggle={hideModal}>Result modal</ModalHeader>
       <ModalBody>
         {response && !backendError && (

@@ -1,4 +1,4 @@
-from .crorrsing import OnePointCrossing
+from .crorrsing import OnePointCrossing, OneTwoPointsCrossing,OneThreePointsCrossing,HomoCrossing
 from .functions.goldstein_price import goldstein_price
 from .mutation import HomogeneousMutation, EdgeMutation, TwoPointMutation
 from .population import Population
@@ -18,9 +18,9 @@ class Calculation:
 
     crossing_dictionary = {
         "one_point": OnePointCrossing(),
-        "two_points": OnePointCrossing(),
-        "three_points": OnePointCrossing(),
-        "homo": OnePointCrossing()
+        "two_points": OneTwoPointsCrossing(),
+        "three_point": OneThreePointsCrossing(),
+        "homo": HomoCrossing()
     }
 
     mutation_dictionary = {

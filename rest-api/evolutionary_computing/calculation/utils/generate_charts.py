@@ -1,15 +1,11 @@
 import statistics
-
 from matplotlib import pyplot as plt
-
-
 def make_chart(calculation_result):
     epoch = []
     value = []
     for i in calculation_result:
         epoch.append(i[0])
         value.append(i[3])
-
     plt.figure(figsize=(7, 4), dpi=200)
     plt.title("Wartosc funkcji od kolejnej iteracji")
     plt.xlabel('Ilosc epok')
@@ -20,17 +16,14 @@ def make_chart(calculation_result):
     plt.show()
     return epoch, value
 
-
 def save_charts(values):
     plt.figure(figsize=(7, 4), dpi=200)
     plt.title("Srednia wartosc funkcji oraz odchylenie standardowe")
     plt.ylabel('Ilosc epok')
     plt.xlabel('Wartosc funkcji')
-
-    plt.hist(values, bins=50, color='c', edgecolor='k')
-    m = statistics.mean(values)
-    sd = statistics.stdev(values)
-
+    plt.hist(values[1], bins=50, color='c', edgecolor='k')
+    m = statistics.mean(values[1])
+    sd = statistics.stdev(values[1])
     plt.axvline(m, color='k', linestyle='dashed')
     plt.axvline(m + sd, color='y', linestyle='dashed')
     plt.axvline(m - sd, color='y', linestyle='dashed')
