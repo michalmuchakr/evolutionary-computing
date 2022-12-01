@@ -35,15 +35,24 @@ def arithmeticCrossover(x1,y1,x2,y2):
 def blendCrossoverXY(x1,y1,x2,y2,alfa):
     returnX1Y1 = []
     for num,x1 in enumerate(x1):
-        minim = min(x1,x2[num])
-        absss = abs(x1-x2[num])
-        rand = random.uniform(0.3,0)
         returnX1Y1.append([random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num])),\
                            random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num]))])
         returnX1Y1.append([random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num])),\
                            random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num]))])
 
     return returnX1Y1
+
+def blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta):
+    returnX1Y1 = []
+    for num,x1 in enumerate(x1):
+        returnX1Y1.append([random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+beta*abs(x1-x2[num])),\
+                           random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+beta*abs(x1-x2[num]))])
+        returnX1Y1.append([random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+beta*abs(x1-x2[num])),\
+                           random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+beta*abs(x1-x2[num]))])
+
+    return returnX1Y1
+
+
 
 
 
@@ -182,3 +191,14 @@ class BlendCrossover(CrossingStrategy):
         alfa = 0.25
 
         return blendCrossoverXY(x1,y1,x2,y2,alfa) + blendCrossoverXY(x1,y1,x2,y2,alfa)
+
+class BlendCrossoverBeta(CrossingStrategy):
+    def cross(self, members, probability, problem_to_solve):
+
+        x1,x2 = ([members.dec_gens[0] for numb, members in enumerate(members) if numb % 2 == 0],[members.dec_gens[0] for numb,members in enumerate(members) if numb%2!=0])
+        y1, y2 = ([members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 == 0],
+                  [members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 != 0])
+        alfa = 0.25
+        beta = 0.7
+
+        return blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta) + blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta)
