@@ -52,6 +52,16 @@ def blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta):
 
     return returnX1Y1
 
+def averageCrossoverXY(x1,y1,x2,y2):
+    returnX1Y1 = []
+    for num,x1 in enumerate(x1):
+        xd = random.uniform(0.01,0.2)
+        returnX1Y1.append([(x1+x2[num])/2 , (y1[num]+y2[num])/2])
+        returnX1Y1.append([(x1+x2[num]-xd)/2 , (y1[num]+y2[num]-xd)/2])
+
+    return returnX1Y1
+
+
 
 
 
@@ -202,3 +212,13 @@ class BlendCrossoverBeta(CrossingStrategy):
         beta = 0.7
 
         return blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta) + blendCrossoverXYBeta(x1,y1,x2,y2,alfa,beta)
+
+class AverageCrossover(CrossingStrategy):
+    def cross(self, members, probability, problem_to_solve):
+
+        x1,x2 = ([members.dec_gens[0] for numb, members in enumerate(members) if numb % 2 == 0],[members.dec_gens[0] for numb,members in enumerate(members) if numb%2!=0])
+        y1, y2 = ([members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 == 0],
+                  [members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 != 0])
+
+        return averageCrossoverXY(x1,y1,x2,y2) + averageCrossoverXY(x1,y1,x2,y2)
+

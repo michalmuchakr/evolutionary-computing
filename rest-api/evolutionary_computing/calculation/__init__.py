@@ -1,4 +1,4 @@
-from .crorrsing import OnePointCrossing, OneTwoPointsCrossing,OneThreePointsCrossing,HomoCrossing, ArithmeticCrossover,BlendCrossover,BlendCrossoverBeta
+from .crorrsing import OnePointCrossing, OneTwoPointsCrossing,OneThreePointsCrossing,HomoCrossing, ArithmeticCrossover,BlendCrossover,BlendCrossoverBeta,AverageCrossover
 from .functions.goldstein_price import goldstein_price
 from .mutation import HomogeneousMutation, EdgeMutation, TwoPointMutation
 from .population import Population
@@ -17,7 +17,7 @@ class Calculation:
     }
 
     crossing_dictionary = {
-        "one_point": BlendCrossoverBeta(),
+        "one_point": AverageCrossover(),
         "two_points": OneTwoPointsCrossing(),
         "three_point": OneThreePointsCrossing(),
         "homo": HomoCrossing()
