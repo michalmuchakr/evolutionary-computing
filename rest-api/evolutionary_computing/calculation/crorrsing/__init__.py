@@ -29,13 +29,23 @@ def getGenesArithmeticCrossoverX1X2Y1Y2(x1, y1, x2,y2):
         returnX1Y1.append([(1 - k_parameter) * x1 + k_parameter * x2[num], (1 - k_parameter) * y1[num] + k_parameter * y2[num]])
     return returnX1Y1
 
-
-
-#[(1 - k_parameter) * member.dec_gens[0] + k_parameter * next_member.dec_gens[0] \
-#    , (1 - k_parameter) * member.dec_gens[1] + k_parameter * next_member.dec_gens[1]]
-
 def arithmeticCrossover(x1,y1,x2,y2):
     return getGenesArithmeticCrossoverX1X2Y1Y2(x1, y1, x2,y2)
+
+def blendCrossoverXY(x1,y1,x2,y2,alfa):
+    returnX1Y1 = []
+    for num,x1 in enumerate(x1):
+        minim = min(x1,x2[num])
+        absss = abs(x1-x2[num])
+        rand = random.uniform(0.3,0)
+        returnX1Y1.append([random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num])),\
+                           random.uniform((min(x1,x2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num]))])
+        returnX1Y1.append([random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num])),\
+                           random.uniform((min(y1[num],y2[num])-alfa*abs(x1-x2[num])),max(x1,x2[num])+alfa*abs(x1-x2[num]))])
+
+    return returnX1Y1
+
+
 
 def get_genes_crossed_two_point(member, next_member, crossing_points, gene_x_index):
     if crossing_points[0] < crossing_points[1]:
@@ -162,3 +172,13 @@ class ArithmeticCrossover(CrossingStrategy):
                   [members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 != 0])
 
         return arithmeticCrossover(x1,y1,x2,y2) + arithmeticCrossover(x1,y1,x2,y2)
+
+class BlendCrossover(CrossingStrategy):
+    def cross(self, members, probability, problem_to_solve):
+
+        x1,x2 = ([members.dec_gens[0] for numb, members in enumerate(members) if numb % 2 == 0],[members.dec_gens[0] for numb,members in enumerate(members) if numb%2!=0])
+        y1, y2 = ([members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 == 0],
+                  [members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 != 0])
+        alfa = 0.25
+
+        return blendCrossoverXY(x1,y1,x2,y2,alfa) + blendCrossoverXY(x1,y1,x2,y2,alfa)
