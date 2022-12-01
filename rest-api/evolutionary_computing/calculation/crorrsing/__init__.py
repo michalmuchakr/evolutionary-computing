@@ -21,6 +21,21 @@ def cross_item_one_point(member, next_member):
         get_genes_crossed_one_point(member, next_member, crossing_point, 1),
     ]
 
+def getGenesArithmeticCrossoverX1X2Y1Y2(x1, y1, x2,y2):
+    returnX1Y1 = []
+    for num,x1 in enumerate(x1):
+        k_parameter = random.random()
+        returnX1Y1.append([k_parameter * x1 + (1-k_parameter) * x2[num],k_parameter * y1[num] + (1-k_parameter) * y2[num]])
+        returnX1Y1.append([(1 - k_parameter) * x1 + k_parameter * x2[num], (1 - k_parameter) * y1[num] + k_parameter * y2[num]])
+    return returnX1Y1
+
+
+
+#[(1 - k_parameter) * member.dec_gens[0] + k_parameter * next_member.dec_gens[0] \
+#    , (1 - k_parameter) * member.dec_gens[1] + k_parameter * next_member.dec_gens[1]]
+
+def arithmeticCrossover(x1,y1,x2,y2):
+    return getGenesArithmeticCrossoverX1X2Y1Y2(x1, y1, x2,y2)
 
 def get_genes_crossed_two_point(member, next_member, crossing_points, gene_x_index):
     if crossing_points[0] < crossing_points[1]:
@@ -138,3 +153,12 @@ class HomoCrossing(CrossingStrategy):
                 members[chromosome_index]
             ) for chromosome_index in range(0, len(members), 2)] + \
             [member.binary_gens for member in members]
+
+class ArithmeticCrossover(CrossingStrategy):
+    def cross(self, members, probability, problem_to_solve):
+
+        x1,x2 = ([members.dec_gens[0] for numb, members in enumerate(members) if numb % 2 == 0],[members.dec_gens[0] for numb,members in enumerate(members) if numb%2!=0])
+        y1, y2 = ([members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 == 0],
+                  [members.dec_gens[1] for numb, members in enumerate(members) if numb % 2 != 0])
+
+        return arithmeticCrossover(x1,y1,x2,y2) + arithmeticCrossover(x1,y1,x2,y2)
