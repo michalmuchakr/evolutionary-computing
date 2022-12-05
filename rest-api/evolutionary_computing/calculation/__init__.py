@@ -17,10 +17,14 @@ class Calculation:
     }
 
     crossing_dictionary = {
-        "one_point": AverageCrossover(),
+        "one_point": OnePointCrossing(),
         "two_points": OneTwoPointsCrossing(),
         "three_point": OneThreePointsCrossing(),
-        "homo": HomoCrossing()
+        "homo": HomoCrossing(),
+        "arithmeticCrossover": ArithmeticCrossover(),
+        "blendCrossover": BlendCrossover(),
+        "blendCrossoverBeta":BlendCrossoverBeta(),
+        "averageCrossover":AverageCrossover()
     }
 
     mutation_dictionary = {
