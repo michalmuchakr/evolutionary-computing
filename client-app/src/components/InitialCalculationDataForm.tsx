@@ -101,7 +101,7 @@ const InitialCalculationDataForm = ({
       />
       <SelectElement label="Selection method" options={['best', 'roulette', 'tournament']} onChangeCallBack={setSelectionMethod}
                      selectValue={selectionMethod}/>
-      <SelectElement label="Cross method" options={['one_point', 'two_points', 'three_point', 'homo']}
+      <SelectElement label="Cross method" options={['one_point', 'two_points', 'three_point', 'homo','arithmeticCrossover','blendCrossover','blendCrossoverBeta','averageCrossover']}
                      onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
       <SelectElement label="Mutation method" options={['homogeneous_mutation', 'edge_mutation', 'two_point_mutation']} onChangeCallBack={setMutationMethod}
                      selectValue={mutationMethod}/>
