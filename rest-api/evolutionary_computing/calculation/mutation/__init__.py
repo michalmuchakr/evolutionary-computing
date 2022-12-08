@@ -4,12 +4,12 @@ from abc import ABC, abstractmethod
 
 class MutationStrategy(ABC):
     @abstractmethod
-    def mutate(self, member_after_crossing, probability_of_mutation):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
         pass
 
 
 class HomogeneousMutation(MutationStrategy):
-    def mutate(self, member_after_crossing, probability_of_mutation):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
         member_after_mutation = []
         for i in member_after_crossing:
             probability_of_mutation_tmp = random.uniform(0, 1)
@@ -38,7 +38,7 @@ class HomogeneousMutation(MutationStrategy):
 
 
 class EdgeMutation(MutationStrategy):
-    def mutate(self, member_after_crossing, probability_of_mutation):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
         member_after_mutation = []
         for i in member_after_crossing:
             probability_of_mutation_tmp = random.uniform(0, 1)
@@ -62,7 +62,7 @@ class EdgeMutation(MutationStrategy):
 
 class TwoPointMutation(MutationStrategy):
 
-    def mutate(self, member_after_crossing, probability_of_mutation):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
         member_after_mutation = []
         for i in member_after_crossing:
             probability_of_mutation_tmp = random.uniform(0, 1)
@@ -192,8 +192,30 @@ class TwoPointMutation(MutationStrategy):
                                                   i[1][0:first_draw_2 - 1] + [False] + i[1][
                                                                                        first_draw_2:second_draw_2 - 1] + [
                                                       True] + i[1][second_draw_2:]])
-
-
             else:
                 member_after_mutation.append(i)
         return member_after_mutation
+
+
+class UniformMutation(MutationStrategy):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
+        for member_item in member_after_crossing:
+            member_item[random.randint(0, 1)] = random.uniform(
+                search_result_range_from,
+                search_result_range_to
+            )
+
+        return member_after_crossing
+
+
+class GaussMutation(MutationStrategy):
+    def mutate(self, member_after_crossing, probability_of_mutation, search_result_range_from, search_result_range_to):
+        mean = 0
+        sigma = 0.4
+        
+        for member_item in member_after_crossing:
+            if random.uniform(0, 1) < probability_of_mutation:
+                member_item[0] = random.gauss(mean, sigma)
+                member_item[1] = random.gauss(mean, sigma)
+
+        return member_after_crossing

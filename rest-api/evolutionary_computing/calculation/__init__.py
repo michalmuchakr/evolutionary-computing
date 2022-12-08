@@ -1,6 +1,6 @@
 from .crorrsing import OnePointCrossing, OneTwoPointsCrossing,OneThreePointsCrossing,HomoCrossing, ArithmeticCrossover,BlendCrossover,BlendCrossoverBeta,AverageCrossover
 from .functions.goldstein_price import goldstein_price
-from .mutation import HomogeneousMutation, EdgeMutation, TwoPointMutation
+from .mutation import HomogeneousMutation, EdgeMutation, TwoPointMutation, UniformMutation, GaussMutation
 from .population import Population
 from .selection import RouletteSelection, TournamentSelection
 
@@ -23,14 +23,16 @@ class Calculation:
         "homo": HomoCrossing(),
         "arithmeticCrossover": ArithmeticCrossover(),
         "blendCrossover": BlendCrossover(),
-        "blendCrossoverBeta":BlendCrossoverBeta(),
-        "averageCrossover":AverageCrossover()
+        "blendCrossoverBeta": BlendCrossoverBeta(),
+        "averageCrossover": AverageCrossover()
     }
 
     mutation_dictionary = {
         "homogeneous_mutation": HomogeneousMutation(),
         "edge_mutation": EdgeMutation(),
         "two_point_mutation": TwoPointMutation(),
+        "uniform_mutation": UniformMutation(),
+        "gauss_mutation": GaussMutation(),
     }
 
     fit_function_dictionary = {
@@ -39,6 +41,7 @@ class Calculation:
 
     def __init__(
         self,
+        gene_type,
         epoch_amount,
         best_members_selection_percentage,
         population_members_count,
@@ -57,6 +60,7 @@ class Calculation:
     ):
         """
         Attributes:
+            gene_type: binary or real
             epoch_amount: amount of epochs in calculation
             best_members_selection_percentage: percentage the best members picked in selection
             population_members_count: amount of population members
@@ -66,9 +70,10 @@ class Calculation:
             selection_method: type of selection
             mutation_method: fitness function
         """
+        self.gene_type = gene_type
         self.selection_kind = self.selection_dictionary[selection_method]
         self.best_percentage_selection_members = best_members_selection_percentage
-        self.population = Population(population_members_count, self.selection_kind)
+        self.population = Population(population_members_count, self.selection_kind, gene_type)
         self.epoch_amount = epoch_amount
         self.search_result_range_from = search_result_range_from
         self.search_result_range_to = search_result_range_to
@@ -85,6 +90,7 @@ class Calculation:
     def trigger(self):
         self.population.generate(self.search_result_range_from, self.search_result_range_to)
         return self.population.evolve(
+            self.gene_type,
             self.fitness,
             self.crossing,
             self.epoch_amount,

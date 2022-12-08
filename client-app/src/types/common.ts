@@ -33,4 +33,6 @@ export type initialCalculationDataFormType = {
   mutationMethod: string;
   setMutationMethod: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
+  setGeneType: Dispatch<SetStateAction<string>>;
+  geneType: string;
 };

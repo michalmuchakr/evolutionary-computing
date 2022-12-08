@@ -9,19 +9,26 @@ class Chromosome:
     dec_gens = []  # decimal gens for X1, X2 [float, float]
     value = 0
 
-    def __init__(self, left_limit, right_limit, length, fitness, initial_binary_gens):
+    def __init__(self, left_limit, right_limit, length, fitness, initial_gens, gene_type):
         """
         Attributes:
             left_limit: lower limit of the final value
             right_limit: upper limit of the final value
             length: length of the chromosome
             fitness: fitness function
-            initial_binary_gens: [bool[], bool[]]
+            initial_gens: [bool[], bool[]]
         """
-        self._binary_gens = self.__generate(length, initial_binary_gens)
+        if gene_type == 'binary' or len(initial_gens) == 0:
+            self._binary_gens = self.__generate(length, initial_gens)
+
         self.left_limit = left_limit
         self.right_limit = right_limit
-        self.dec_gens = self.__bin_to_decimal()
+
+        if gene_type == 'binary' or len(initial_gens) == 0:
+            self.dec_gens = self.__bin_to_decimal()
+        else:
+            self.dec_gens = initial_gens
+
         self.value = fitness(self.dec_gens[0], self.dec_gens[1])
 
     @property

@@ -21,8 +21,9 @@ class Inversion:
         return array[0:start] + fragment + array[end:]
 
     def inversion_in_population(self, population_after_mutation):
-        return [
-            [self.inversion(chromosome[index_element], self.probability, index_element, chromosome_index)
-                for index_element in range(2)]
-            for chromosome_index, chromosome in enumerate(population_after_mutation)
-        ]
+        # return [
+        #     [self.inversion(chromosome[index_element], self.probability, index_element, chromosome_index)
+        #         for index_element in range(2)]
+        #     for chromosome_index, chromosome in enumerate(population_after_mutation)
+        # ]
+        return population_after_mutation

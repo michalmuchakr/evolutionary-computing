@@ -54,6 +54,7 @@ class CalculationList(APIView):
     @staticmethod
     def _calculate_evolutionary_computing(request):
         evolutionary_computing_calculation = Calculation(
+            request.data['gene_type'],
             int(request.data['epoch_amount']),
             int(request.data['best_members_selection_percentage']),
             int(request.data['population_members_count']),

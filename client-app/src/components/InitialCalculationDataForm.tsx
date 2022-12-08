@@ -6,8 +6,6 @@ import SelectElement from "./SelectElement";
 const InitialCalculationDataForm = ({
                                       problemToBeSolved,
                                       setProblemToBeSolved,
-                                      bestMembersSelectionPercentage,
-                                      setBestMembersSelectionPercentage,
                                       onFormSubmit,
                                       beginOfrRange,
                                       setBeginOfRange,
@@ -17,8 +15,6 @@ const InitialCalculationDataForm = ({
                                       setPopulationMembersCount,
                                       epochsCount,
                                       setEpochsCount,
-                                      tournamentSelectionCount,
-                                      setTournamentSelectionCount,
                                       eliteStrategyPercentage,
                                       setEliteStrategyPercentage,
                                       inversionProbability,
@@ -33,10 +29,15 @@ const InitialCalculationDataForm = ({
                                       setCrossMethod,
                                       mutationMethod,
                                       setMutationMethod,
-                                      isLoading
+                                      isLoading,
+                                      setGeneType,
+                                      geneType
                                     }: initialCalculationDataFormType) => {
   return (
     <Form onSubmit={onFormSubmit}>
+      <SelectElement label="Gene type" options={['binary', 'real']}
+                     onChangeCallBack={setGeneType} selectValue={geneType}/>
+
       <SelectElement label="Problem to solve" options={['minimization', 'maximization']}
                      onChangeCallBack={setProblemToBeSolved} selectValue={problemToBeSolved}/>
       <InputElement
@@ -69,18 +70,6 @@ const InitialCalculationDataForm = ({
         inputValue={eliteStrategyPercentage}
         onChangeCallBack={setEliteStrategyPercentage}
       />
-      {/*<InputElement*/}
-      {/*  elementName="bestMembersSelectionPercentage"*/}
-      {/*  labelTxt="Best members percentage"*/}
-      {/*  inputValue={bestMembersSelectionPercentage}*/}
-      {/*  onChangeCallBack={setBestMembersSelectionPercentage}*/}
-      {/*/>*/}
-      {/*<InputElement*/}
-      {/*  elementName="chromosomCount"*/}
-      {/*  labelTxt="Tournament selection amount"*/}
-      {/*  inputValue={tournamentSelectionCount}*/}
-      {/*  onChangeCallBack={setTournamentSelectionCount}*/}
-      {/*/>*/}
       <InputElement
         elementName="crossProbablility"
         labelTxt="Cross probablility"
@@ -99,12 +88,24 @@ const InitialCalculationDataForm = ({
         inputValue={inversionProbability}
         onChangeCallBack={setInversionProbability}
       />
-      <SelectElement label="Selection method" options={['best', 'roulette', 'tournament']} onChangeCallBack={setSelectionMethod}
+      <SelectElement label="Selection method" options={['best', 'roulette', 'tournament']}
+                     onChangeCallBack={setSelectionMethod}
                      selectValue={selectionMethod}/>
-      <SelectElement label="Cross method" options={['one_point', 'two_points', 'three_point', 'homo','arithmeticCrossover','blendCrossover','blendCrossoverBeta','averageCrossover']}
+      <SelectElement label="Cross method"
+                     options={
+                       geneType === 'binary'
+                         ? ['one_point', 'two_points', 'three_point', 'homo']
+                         : ['arithmeticCrossover', 'blendCrossover', 'blendCrossoverBeta', 'averageCrossover']
+                     }
                      onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
-      <SelectElement label="Mutation method" options={['homogeneous_mutation', 'edge_mutation', 'two_point_mutation']} onChangeCallBack={setMutationMethod}
-                     selectValue={mutationMethod}/>
+      <SelectElement label="Mutation method"
+                     options={
+
+                       geneType === 'binary' ? ['homogeneous_mutation', 'edge_mutation', 'two_point_mutation']
+                         : ['uniform_mutation', 'gauss_mutation']}
+                     onChangeCallBack={setMutationMethod}
+                     selectValue={mutationMethod}
+      />
       <Row>
         <Col
           className="d-flex justify-content-center"

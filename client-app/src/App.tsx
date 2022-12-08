@@ -1,11 +1,12 @@
-import {FormEvent, useState} from 'react';
+import {FormEvent, useEffect, useState} from 'react';
 import {Col, Container, Row} from 'reactstrap';
 import InitialCalculationDataForm from './components/InitialCalculationDataForm';
 import ResultModal from './components/ResultModal';
 import axios from "axios";
 
 const App = () => {
-  const [problemToBeSolved, setProblemToBeSolved] = useState('maximization');
+  const [geneType, setGeneType] = useState('binary');
+  const [problemToBeSolved, setProblemToBeSolved] = useState('minimization');
   const [beginOfrRange, setBeginOfRange] = useState('-2');
   const [endOfRange, setEndOfRange] = useState('2');
   const [populationMembersCount, setPopulationMembersCount] = useState('200');
@@ -13,7 +14,6 @@ const App = () => {
   const [tournamentSelectionCount, setTournamentSelectionCount] = useState('2');
   const [eliteStrategyPercentage, setEliteStrategyPercentage] = useState('20');
   const [bestMembersSelectionPercentage, setBestMembersSelectionPercentage] = useState('20');
-  // const [bitsCount, setBitsCount] = useState('');
   const [crossProbablility, setCrossProbablility] = useState('20');
   const [mutationProbability, setMutationProbability] = useState('80');
   const [inversionProbability, setInversionProbability] = useState('80');
@@ -36,12 +36,23 @@ const App = () => {
     setIsModalOpened(false);
   };
 
+  useEffect(() => {
+    if (geneType === 'binary') {
+      setCrossMethod('one_point')
+      setMutationMethod('homogeneous_mutation')
+    } else {
+      setCrossMethod('arithmeticCrossover')
+      setMutationMethod('uniform_mutation')
+    }
+  }, [geneType])
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     setBackendError(null)
     setLoading(true);
 
     axios.post('http://127.0.0.1:8000/evolutionary-computing/compute/', {
+      gene_type: geneType,
       epoch_amount: epochsCount,
       best_members_selection_percentage: bestMembersSelectionPercentage,
       population_members_count: populationMembersCount,
@@ -108,7 +119,9 @@ const App = () => {
             // setBitsCount={setBitsCount}
             setCrossProbablility={setCrossProbablility}
             isLoading={isLoading}
-            setTournamentSelectionCount={setTournamentSelectionCount}/>
+            setTournamentSelectionCount={setTournamentSelectionCount}
+            setGeneType={setGeneType}
+            geneType={geneType}/>
           <ResultModal hideModal={hideModal}
                        isLoading={isLoading} isModalOpened={isModalOpened} response={response} backendError={backendError}/>
         </Col>

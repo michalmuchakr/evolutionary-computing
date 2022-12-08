@@ -16,10 +16,11 @@ class Population:
     _chromosomes: List[Chromosome] = []
     _size: int = 0
 
-    def __init__(self, size, selection: SelectionStrategy):
+    def __init__(self, size, selection: SelectionStrategy, gene_type):
         self.__chromosomes_length = 0
         self._selection = selection
         self._size = size
+        self.gene_type = gene_type
 
     def generate(self, left_limit, right_limit):
         self.__chromosomes_length = Chromosome.calc_length(left_limit, right_limit)
@@ -28,7 +29,8 @@ class Population:
             right_limit,
             self.__chromosomes_length,
             goldstein_price,
-            []
+            [],
+            self.gene_type
         ) for _ in range(self._size)]
 
     def __elite_strategy(self, elite_percentage, problem_to_solve):
@@ -74,6 +76,7 @@ class Population:
 
     def evolve(
         self,
+        gene_type,
         fitness,
         crossing,
         epoch_amount,
@@ -115,11 +118,15 @@ class Population:
             member_after_crossing = crossing.cross(selected, probability_of_crossing, problem_to_solve)
 
             # 4. mutation
-            member_after_mutation = mutation.mutate(member_after_crossing, probability_of_mutation)
+            member_after_mutation = mutation.mutate(member_after_crossing,
+                                                    probability_of_mutation,
+                                                    search_result_range_from,
+                                                    search_result_range_to)
 
             # 5. inversion
-            population_inversion = Inversion(probability_of_inversion)
-            inverted_population = population_inversion.inversion_in_population(member_after_mutation)
+            if gene_type == 'binary':
+                population_inversion = Inversion(probability_of_inversion)
+                member_after_mutation = population_inversion.inversion_in_population(member_after_mutation)
 
             # 6. assign to _chromosomes
             self._chromosomes = []
@@ -129,8 +136,9 @@ class Population:
                     search_result_range_to,
                     self.__chromosomes_length,
                     fitness,
-                    initial_binary_gens
-                ) for initial_binary_gens in inverted_population] \
+                    initial_gens,
+                    gene_type
+                ) for initial_gens in member_after_mutation] \
                 + saved_elite_chromosomes
 
             # 7. result aggregation
