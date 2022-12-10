@@ -97,10 +97,9 @@ const InitialCalculationDataForm = ({
                          ? ['one_point', 'two_points', 'three_point', 'homo']
                          : ['arithmeticCrossover', 'blendCrossover', 'blendCrossoverBeta', 'averageCrossover']
                      }
-                     onChangeCallBack={setCrossMethod} selectValue={crossMethod}/>
+                     onChangeCallBack={setCrossMethod} selectValue={crossMethod} />
       <SelectElement label="Mutation method"
                      options={
-
                        geneType === 'binary' ? ['homogeneous_mutation', 'edge_mutation', 'two_point_mutation']
                          : ['uniform_mutation', 'gauss_mutation']}
                      onChangeCallBack={setMutationMethod}
